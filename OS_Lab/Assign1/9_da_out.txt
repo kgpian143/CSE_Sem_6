@@ -1,0 +1,9 @@
+CS 3
+CIVIL 3
+ELEC 2
+MECH 1
+HSS 1
+
+Meena
+Arya
+6

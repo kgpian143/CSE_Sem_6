@@ -1,0 +1,15 @@
+GET http://127.0.0.1/home/vinod/Documents/IIT_Kharagpur/CSE_Sem_6/Networks_Lab/file.txt:20000
+GET http://cse.iitkgp.ac.in/~agupta/networks/index.html:20000
+GET http://127.0.0.1/home/vinod/Documents/IIT_Kharagpur/CSE_Sem_6/Networks_Lab/Assign3/Assgn-3.pdf:20000
+GET http://127.0.0.1/home/vinod/Documents/My_Documents/image/IMG20221130210707.jpg:20000
+GET http://127.0.0.1/home/vinod/Documents/IIT_Kharagpur/CSE_Sem_6/Networks_Lab/Assgn-4.pdf:20000
+GET http://127.0.0.1/home/vinod/Documents/IIT_Kharagpur/CSE_Sem_6/Networks_Lab/Assgn-4.pdf:20000
+GET http://127.0.0.1/home/vinod/Documents/IIT_Kharagpur/CSE_Sem_6/Networks_Lab/index.html:20000
+GET http://127.0.0.1/home/vinod/Documents/IIT_Kharagpur/CSE_Sem_6/Networks_Lab/Assgn-4.pdf:20000
+PUT http://127.0.0.1/home/vinod/Documents/IIT_Kharagpur/CSE_Sem_6/Networks_Lab:20000 inp.txt
+PUT http://127.0.0.1/home/vinod/Documents/IIT_Kharagpur/CSE_Sem_6/Network:20000 inp.txt
+GET http://10.145.180.137/home/lenovo/Semester6/Networks_lab/A4/meena.txt:20000
+PUT http://10.145.180.137/home/lenovo/Semester6/Networks_lab/A4:20000 inp.txt
+GET http://10.145.180.137/home/lenovo/Semester6/Networks_lab/A4/Assgn-4.pdf:20000
+sudo ufw enable
+sudo ufw allow
