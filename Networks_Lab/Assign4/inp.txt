@@ -7,6 +7,7 @@ GET http://127.0.0.1/home/vinod/Documents/IIT_Kharagpur/CSE_Sem_6/Networks_Lab/m
 GET http://127.0.0.1/home/vinod/Documents/IIT_Kharagpur/CSE_Sem_6/Networks_Lab/index.html:20000
 GET http://127.0.0.1/home/vinod/Documents/IIT_Kharagpur/CSE_Sem_6/Networks_Lab/Assgn-4.pdf:20000
 PUT http://127.0.0.1/home/vinod/Documents/IIT_Kharagpur/CSE_Sem_6/Networks_Lab:20000 inp.txt
+PUT http://127.0.0.1/home/vinod/Documents/IIT_Kharagpur/CSE_Sem_6/Networks_Lab:20000 mypdf.pdf
 PUT http://127.0.0.1/home/vinod/Documents/IIT_Kharagpur/CSE_Sem_6/Network:20000 inp.txt
 GET http://10.145.180.137/home/lenovo/Semester6/Networks_lab/A4/meena.txt:20000
 GET http://10.145.180.137/home/lenovo/Semester6/Networks_lab/A4/index.html:20000

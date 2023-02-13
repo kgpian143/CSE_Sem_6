@@ -31,16 +31,16 @@
 //             send(sockfd, buf, 5, 0);
 //             break;
 //         }
-            
+
 //         buf[ind1++] = mess[ind2++];
 //     }
 // }
 
 // void recv_str( char mess[20000] , int id )
 // {
-//     char buf[10] ; 
+//     char buf[10] ;
 //     mess[0] = '\0' ;
-//     int k , j , flag =0 ; 
+//     int k , j , flag =0 ;
 //     for( int i = 0 ; i < 10 ; i++ )buf[i] = '\0' ;
 //     while(1)
 //     {
@@ -52,7 +52,7 @@
 //             if( buf[i] == '\0')
 //             {
 //                 flag =1 ;
-//                 break; 
+//                 break;
 //             }
 //             buf[i] = '\0' ;
 //         }
@@ -62,78 +62,77 @@
 
 void send_str(int sockfd, char str[8196])
 {
-    int flag = 0, ind1 = 0, ind2 = 0;
-    char buf[CHUNK_SIZE+5];
+	int flag = 0, ind1 = 0, ind2 = 0;
+	char buf[CHUNK_SIZE + 5];
 	for (int i = 0; i < 105; i++)
-        buf[i] = '\0';
-    while (1)
-    {
-        if (ind1 == CHUNK_SIZE)
-        {
-            send(sockfd, buf, CHUNK_SIZE, 0);
+		buf[i] = '\0';
+	while (1)
+	{
+		if (ind1 == CHUNK_SIZE)
+		{
+			send(sockfd, buf, CHUNK_SIZE, 0);
 			// printf("%s", buf);
-            ind1 = 0;
-        }
-        if (str[ind2] == '\0')
-            break;
-        buf[ind1++] = str[ind2++];
-    }
-    if (ind1 == CHUNK_SIZE)
-    {
-        send(sockfd, buf, CHUNK_SIZE, 0);
+			ind1 = 0;
+		}
+		if (str[ind2] == '\0')
+			break;
+		buf[ind1++] = str[ind2++];
+	}
+	if (ind1 == CHUNK_SIZE)
+	{
+		send(sockfd, buf, CHUNK_SIZE, 0);
 		// printf("%s", buf);
-        ind1 = 0;
-        buf[ind1++] = '\0';
-        send(sockfd, buf, CHUNK_SIZE, 0);
+		ind1 = 0;
+		buf[ind1++] = '\0';
+		send(sockfd, buf, CHUNK_SIZE, 0);
 		// printf("%s", buf);
-    }
-    else
-    {
-        buf[ind1++] = '\0';
-        send(sockfd, buf, CHUNK_SIZE, 0);
+	}
+	else
+	{
+		buf[ind1++] = '\0';
+		send(sockfd, buf, CHUNK_SIZE, 0);
 		// printf("%s", buf);
-    }
+	}
 }
 
 int recv_str(int sockfd, char str[1000])
 {
-    int flag = 0;
-    char buf[105];
-    for (int i = 0; i < 105; i++)
-        buf[i] = '\0';
-    recv(sockfd, buf, CHUNK_SIZE, 0);
-    strcpy(str, "\0");
-    for (int i = 0; i < CHUNK_SIZE; i++)
-    {
-        if (buf[i] == '\0')
-        {
+	int flag = 0;
+	char buf[105];
+	for (int i = 0; i < 105; i++)
+		buf[i] = '\0';
+	recv(sockfd, buf, CHUNK_SIZE, 0);
+	strcpy(str, "\0");
+	for (int i = 0; i < CHUNK_SIZE; i++)
+	{
+		if (buf[i] == '\0')
+		{
 			strcat(str, buf);
-            flag = 1;
-            break;
-        }
-    }
-    while (flag == 0)
-    {
-        for (int i = 0; i < CHUNK_SIZE; i++)
-        {
-            if (buf[i] == '\0')
-            {
-                strcat(str, buf);
-                flag = 1;
-                break;
-            }
-        }
-        if (flag == 0)
-        {
-            strcat(str, buf);
-            for (int i = 0; i < 105; i++)
-                buf[i] = '\0';
-            recv(sockfd, buf, CHUNK_SIZE, 0);
-        }
-    }
-	return strlen(str) ;
+			flag = 1;
+			break;
+		}
+	}
+	while (flag == 0)
+	{
+		for (int i = 0; i < CHUNK_SIZE; i++)
+		{
+			if (buf[i] == '\0')
+			{
+				strcat(str, buf);
+				flag = 1;
+				break;
+			}
+		}
+		if (flag == 0)
+		{
+			strcat(str, buf);
+			for (int i = 0; i < 105; i++)
+				buf[i] = '\0';
+			recv(sockfd, buf, CHUNK_SIZE, 0);
+		}
+	}
+	return strlen(str);
 }
-
 
 int main()
 {
@@ -175,7 +174,7 @@ int main()
 			printf("Accept error\n");
 			exit(0);
 		}
-		printf("Client connected \n");
+		// printf("Client connected \n");
 
 		if (fork() == 0)
 		{
@@ -197,6 +196,7 @@ int main()
 			local_time = localtime(&current_time);
 
 			char arr[100];
+			strcpy(arr, "\0");
 			char str[20];
 			sprintf(str, "%02d", local_time->tm_mday);
 			strcat(arr, str);
@@ -229,25 +229,28 @@ int main()
 
 			char url[100];
 			recv(newsockfd, url, 100, 0);
-			printf("%s\n", url);
+			// printf("Url : %s\n", url);
 			char protocol_version[100];
 			recv(newsockfd, protocol_version, 100, 0);
-			printf("%s\n", protocol_version);
+			printf("%s %s %s\n",method , url ,  protocol_version);
 			char Host[100];
 			recv(newsockfd, Host, 100, 0);
-			printf("%s\n", Host);
+			printf("Host : %s\n", Host);
+			char Port[100];
+			recv(newsockfd, Port, 100, 0);
+			printf("Port : %s\n", Port);
 			char Connection[100];
 			recv(newsockfd, Connection, 100, 0);
-			printf("%s\n", Connection);
+			printf("Connection : %s\n", Connection);
 			char Date[100];
 			recv(newsockfd, Date, 100, 0);
-			printf("%s\n", Date);
+			printf("Date : %s\n", Date);
 			char Accept[100];
 			recv(newsockfd, Accept, 100, 0);
-			printf("%s\n", Accept);
+			printf("Accept : %s\n", Accept);
 			char Accept_Language[100];
 			recv(newsockfd, Accept_Language, 100, 0);
-			printf("%s\n", Accept_Language);
+			printf("Accept-Language: %s\n", Accept_Language);
 			char If_Modified_Since[100];
 			recv(newsockfd, If_Modified_Since, 100, 0);
 			printf("If-Modified-Since: %s\n", If_Modified_Since);
@@ -256,18 +259,40 @@ int main()
 			{
 				strcat(arr, "GET");
 				strcat(arr, " : ");
-
+                char header_final[100] ;
+				recv( newsockfd , header_final , 100 , 0);
+				printf( "%s",header_final);
 				char file_path[1000];
 				strcpy(file_path, url);
-				printf("file_path : %s\n", file_path);
+				// printf("file_path : %s\n", file_path);
 				send(newsockfd, "HTTP/1.1", 100, 0);
 
 				// printf("Access: %d\n\n", access(file_path, R_OK));
+				// char curr_path[1000] ;
+				// getcwd(curr_path , 100) ;
+				// int res = chdir( file_path ) ; 
+				// if( res == 0 )chdir(curr_path) ;
+				// else 
+				// {
+				// 	char buffer[100];
+				// 	sprintf(buffer, "404");
+				// 	send(newsockfd, buffer, 100, 0);
+				// 	send(newsockfd, "File Not Found", 100, 0);
+				// 	strcat(arr, url);
+				// 	strcat(arr, "\n");
+				// 	fprintf(fp1, arr);
+				// 	fclose(fp1);
+
+				// 	close(newsockfd);
+				// 	exit(0);
+				// }
+				// chdir(curr_path) ;
+
 				if (access(file_path, R_OK) != 0)
 				{
 					// printf("Not readable\n");
 					char access_buf[100];
-					sprintf(access_buf, "400");
+					sprintf(access_buf, "403");
 					send(newsockfd, access_buf, 100, 0);
 					send(newsockfd, "Permission denied", 100, 0);
 
@@ -285,8 +310,9 @@ int main()
 				if (fp != NULL)
 				{
 					char buffer[100];
-					int length;
-					printf("Start\n");
+					// int length;
+					
+					// fclose(fp);
 					struct stat sb;
 					stat(file_path, &sb);
 					struct tm *tm2 = gmtime(&sb.st_mtime);
@@ -295,20 +321,21 @@ int main()
 					memset(&tm1, 0, sizeof(struct tm));
 					strptime(If_Modified_Since, "%a, %d %b %Y %H:%M:%S GMT", &tm1);
 					time_t t1, t2, diff;
-					printf("Year: %d\n", tm1.tm_year + 1900);
-					printf("Month: %d\n", tm1.tm_mon + 1);
-					printf("Day: %d\n", tm1.tm_mday);
-					printf("Hour: %d\n", tm1.tm_hour);
-					printf("Minute: %d\n", tm1.tm_min);
-					printf("Second: %d\n", tm1.tm_sec);
+					// printf("Year: %d\n", tm1.tm_year + 1900);
+					// printf("Month: %d\n", tm1.tm_mon + 1);
+					// printf("Day: %d\n", tm1.tm_mday);
+					// printf("Hour: %d\n", tm1.tm_hour);
+					// printf("Minute: %d\n", tm1.tm_min);
+					// printf("Second: %d\n", tm1.tm_sec);
 					t1 = mktime(tm2);
 					t2 = mktime(&tm1);
 
 					// char buffer[100];
-					printf("t1: %ld \nt2: %ld\n", t1, t2);
+					// printf("t1: %ld \nt2: %ld\n", t1, t2);
 					char lmt[100];
 					strftime(lmt, 100, "%a, %d %b %Y %H:%M:%S GMT", tm2);
-					printf("last modified: %s\n", lmt);
+					// printf("last modified: %s\n", lmt);
+					
 
 					if (t1 < t2)
 					{
@@ -328,30 +355,45 @@ int main()
 						time(&rawtime);
 						modified_time = rawtime + (3 * 24 * 60 * 60);
 						timeinfo = gmtime(&modified_time);
-
 						strftime(buffer_time, 80, "%a, %d %b %Y %H:%M:%S GMT", timeinfo);
 						// sprintf(buffer, "Content-Type: application/octet-stream\r\n");
 						send(newsockfd, buffer_time, 100, 0);
 						// printf("expires time %s\n", buffer_time);
-						send(newsockfd, "Content Lang : en-us\n", 100, 0);
+						send(newsockfd, "Content Lang : en-us", 100, 0);
+						send( newsockfd  , Accept , 100 ,  0 );
+						fseek(fp, 0, SEEK_END) ;
+					// printf("Start\n");
+					    long long int length = ftell(fp);
+						char content_length[100] ;
+						// printf("Content length : %d\n",length);
+						sprintf(content_length, "%lld", length);
+						// printf("Content length : %s\n",content_length);
+						send(newsockfd, content_length, 100, 0);
+						send(newsockfd, lmt, 100, 0);
 						sprintf(buffer, "\r\n");
 						send(newsockfd, buffer, 100, 0);
+					    fseek(fp, 0, SEEK_SET) ;
 
 						// Send the file contents
 						// printf("FILE CONTENT...\n");
 						char read_line[100];
-						while ((length = fread(read_line, 1, 100, fp)) > 0)
+						int read_size ;
+						while ((read_size = fread(read_line, 1, 100, fp)) > 0)
 						{
 							// printf("%s\n", read_line);
-							send(newsockfd, read_line , 100 , 0 );
+							send(newsockfd, read_line, read_size , 0);
 							// send_str(newsockfd, read_line);
 							// printf("sent: %s\n", read_line);
-							for(int i=0; i<100; i++) read_line[i]='\0';
+							for (int i = 0; i < 100; i++)
+								read_line[i] = '\0';
 						}
 					}
 
 					// Close file and client socket
 					fclose(fp);
+					// char final_buff[100] ;
+					// recv( newsockfd , final_buff , 100 , 0 ) ;
+					// printf("%s",final_buff);
 				}
 				else
 				{
@@ -373,17 +415,19 @@ int main()
 
 				char content_length[100];
 				recv(newsockfd, content_length, 100, 0);
-				printf("%s\n", content_length);
-
+				printf("Content length : %s\n", content_length);
+                
 				char content_type[100];
 				recv(newsockfd, content_type, 100, 0);
-				printf("%s\n", content_type);
+				printf("Content type : %s\n", content_type);
 
 				char file_name[100];
 				recv(newsockfd, file_name, 100, 0);
-				printf("%s\n", file_name);
+				printf("File Name : %s\n", file_name);
 				send(newsockfd, "HTTP/1.1", 100, 0);
-
+                char header_final[100] ;
+				recv( newsockfd , header_final , 100 , 0);
+				printf( "%s",header_final);
 				char path[1000];
 				getcwd(path, sizeof(path));
 				int result;
@@ -394,7 +438,7 @@ int main()
 					if (access(url, W_OK) != 0)
 					{
 						char access_buf[100];
-						sprintf(access_buf, "400");
+						sprintf(access_buf, "403");
 						send(newsockfd, access_buf, 100, 0);
 						send(newsockfd, "Permission denied", 100, 0);
 					}
@@ -402,7 +446,7 @@ int main()
 					{
 
 						FILE *fp2 = fopen(file_name, "w");
-						char line[1000];
+						char line[100];
 						if (fp2 != NULL)
 						{
 							char status_code[100];
@@ -415,16 +459,21 @@ int main()
 
 							// printf("FILE CONTENT...\n");
 							// char read_line[8196];
-							for(int i=0; i<1000; i++) line[i]='\0';
-							while ((read_size = recv_str(newsockfd, line)) > 0)
+							for (int i = 0; i < 100; i++)
+								line[i] = '\0';
+							while ((read_size = recv(newsockfd, line , 100 , 0 )) > 0)
 							{
-								// printf("rcvd: %d\n", read_size);
+								// printf("rcvd: %d %d \n", read_size , strlen(line));
 								// printf("%s\n", line);
 								fwrite(line, 1, read_size, fp2);
-								for(int i=0; i<1000; i++) line[i]='\0';
+								for (int i = 0; i < 100; i++)
+									line[i] = '\0';
 							}
 							// printf("rcvd: %d\n", read_size);
 							fclose(fp2);
+							// char final_buff[100] ;
+							// recv( newsockfd , final_buff , 100 , 0 ) ;
+							// printf("%s",final_buff);
 						}
 						else
 						{

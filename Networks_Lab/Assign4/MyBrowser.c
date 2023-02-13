@@ -103,7 +103,7 @@ int main()
     {
         printf("\nMyOwnBrowser> ");
         scanf("%s", method);
-        // printf("%s\n", method);
+        printf("%s\n", method);
         if (strcmp(method, "QUIT") == 0)
         {
             break;
@@ -128,6 +128,7 @@ int main()
         int url_index = 0, ip_index = 0, flag1 = 0, flag3 = 0;
         for (int i = 0; i < 100; i++)
             ip[i] = '\0';
+        for( int i = 0 ; i < 20 ; i++ )port[i] = '\0' ;
         for (int i = index; i < strlen(cmd); i++)
         {
             if (cmd[i] == '/')
@@ -161,10 +162,10 @@ int main()
             perror("Unable to create socket\n");
             exit(0);
         }
-        // printf("%s ...\n",port);
         if (strlen(port) == 0)
             strcpy(port, "80");
-        printf("%s %s\n", ip, port);
+        // printf("%s ...\n",port);
+        // printf("%s %s\n", ip, port);
         serv_addr.sin_family = AF_INET;
         inet_aton(ip, &serv_addr.sin_addr);
         serv_addr.sin_port = htons(atoi(port));
@@ -175,7 +176,7 @@ int main()
             perror("Unable to connect to server\n");
             exit(0);
         }
-        printf("%s\n", url);
+        // printf("%s\n", url);
         send(sockfd, method, 100, 0);
         send(sockfd, url, 100, 0);
         char protocol_version[100];
@@ -184,7 +185,7 @@ int main()
 
         int flag = 0, last = -1;
         char Host[100];
-        strcpy(Host, "Host: ");
+        strcpy(Host, "\0");
         int ind = strlen(Host);
         for (int i = index; i < strlen(cmd); i++)
         {
@@ -200,16 +201,17 @@ int main()
             }
         }
         Host[ind] = '\0';
-        printf("%s\n", Host);
+        // printf("%s\n", Host);
         send(sockfd, Host, 100, 0);
+        send(sockfd, port, 100, 0);
 
         char Connection[100];
-        strcpy(Connection, "Connection: close");
+        strcpy(Connection, "close");
         // printf("%s\n", Connection);
         send(sockfd, Connection, 100, 0);
 
         char Date[100];
-        strcpy(Date, "Date: ");
+        strcpy(Date, "\0");
         time_t rawtime, modified_time;
         struct tm *timeinfo;
         char buffer[80];
@@ -224,10 +226,11 @@ int main()
         // printf("%s\n", Date);
         send(sockfd, Date, 100, 0);
         char content_type[100];
-        strcpy(content_type, "Content Type : ");
+        strcpy(content_type, "\0");
         char Accept[100];
-        strcpy(Accept, "Accept: ");
+        strcpy(Accept, "\0");
         int ind2 = 8, flag2 = 0;
+        char file_ext[10] ;
         for (int i = last + 1; i < strlen(cmd); i++)
         {
             if (cmd[i] == '.')
@@ -239,16 +242,19 @@ int main()
                     if (cmd[i + 1] == 'p' && cmd[i + 2] == 'd' && cmd[i + 3] == 'f')
                     {
                         strcat(Accept, "application/pdf");
+                        strcpy(file_ext , "pdf") ;
                         strcat(content_type, "application/pdf");
                     }
                     else if (cmd[i + 1] == 'j' && cmd[i + 2] == 'p' && cmd[i + 3] == 'g')
                     {
                         strcat(Accept, "image/jpeg");
+                        strcpy(file_ext , "jpeg") ;
                         strcat(content_type, "image/jpeg");
                     }
                     else
                     {
                         strcat(Accept, "text/*");
+                        strcpy(file_ext , "txt") ;
                         strcat(content_type, "text/*");
                     }
                 }
@@ -257,11 +263,13 @@ int main()
                     if (cmd[i + 1] == 'h' && cmd[i + 2] == 't' && cmd[i + 3] == 'm' && cmd[i + 4] == 'l')
                     {
                         strcat(Accept, "text/html");
+                        strcpy(file_ext , "html") ;
                         strcat(content_type, "text/html");
                     }
                     else
                     {
                         strcat(Accept, "text/*");
+                        strcpy(file_ext , "txt") ;
                         strcat(content_type, "text/*");
                     }
                 }
@@ -270,21 +278,25 @@ int main()
                     if (cmd[i + 1] == 'p' && cmd[i + 2] == 'd' && cmd[i + 3] == 'f' && cmd[i + 4] == ':')
                     {
                         strcat(Accept, "application/pdf");
+                        strcpy(file_ext , "pdf") ;
                         strcat(content_type, "application/pdf");
                     }
                     else if (cmd[i + 1] == 'j' && cmd[i + 2] == 'p' && cmd[i + 3] == 'g' && cmd[i + 4] == ':')
                     {
                         strcat(Accept, "image/jpeg");
+                        strcpy(file_ext , "jpeg") ;
                         strcat(content_type, "image/jpeg");
                     }
                     else if (cmd[i + 1] == 'h' && cmd[i + 2] == 't' && cmd[i + 3] == 'm' && cmd[i + 4] == 'l' && cmd[i + 5] == ':')
                     {
                         strcat(Accept, "text/html");
+                        strcpy(file_ext , "html") ;
                         strcat(content_type, "text/html");
                     }
                     else
                     {
                         strcat(Accept, "text/*");
+                        strcpy(file_ext , "txt") ;
                         strcat(content_type, "text/*");
                     }
                 }
@@ -301,7 +313,7 @@ int main()
         send(sockfd, Accept, 100, 0);
 
         char Accept_Language[100];
-        strcpy(Accept_Language, "Accept-Language: en-us");
+        strcpy(Accept_Language, "en-us");
         // printf("%s\n", Accept_Language);
         send(sockfd, Accept_Language, 100, 0);
 
@@ -328,7 +340,8 @@ int main()
                 file_name[k++] = url[i];
             }
             file_name[k] = '\0';
-            printf("file name : %s\n", file_name);
+            send( sockfd , "\r\n" , 100 , 0) ;
+            // printf("file name : %s\n", file_name);
             char version[100];
             char status_code[100];
             char status_message[100];
@@ -346,6 +359,15 @@ int main()
                 char content_lang[100];
                 recv(sockfd, content_lang, 100, 0);
                 printf("%s\n", content_lang);
+                char content_type[100];
+                recv(sockfd, content_type, 100, 0);
+                printf("Content Type : %s\n", content_type);
+                char content_length[100];
+                recv(sockfd, content_length, 100, 0);
+                printf("Content length : %s\n", content_length);
+                char lmt[100];
+                recv(sockfd, lmt, 100, 0);
+                printf("last Modified time : %s\n", lmt);
                 char buff1[100];
                 recv(sockfd, buff1, 100, 0);
                 char server_reply[100];
@@ -359,14 +381,40 @@ int main()
                     // printf("read %d\n", read_size);
                     while ((read_size = recv(sockfd, server_reply , 100 , 0 )) > 0)
                     {
-                        // printf("%s %d\n", server_reply, read_size);
+                        // printf("%d\n", read_size);
+                        // read_size = strlen(server_reply) ;
                         fwrite(server_reply, 1, read_size, fp);
                         for (int i = 0; i < 100 ; i++)
                             server_reply[i] = '\0';
                         // read_size = recv_str(sockfd, server_reply);
                     }
                     fclose(fp);
+                    if( fork() == 0 )
+                    {
+                        if( strcmp( file_ext , "pdf") == 0 )
+                        {
+                            char *args[] = { "xdg-open" , file_name , NULL} ;
+                            execvp( *args , args ) ;
+                        }
+                        else if( strcmp( file_ext , "html") == 0 )
+                        {
+                            char *args[] = { "google-chrome" , file_name , NULL} ;
+                            execvp( *args , args ) ;
+                        }
+                        else if( strcmp( file_ext , "jpeg") == 0 )
+                        {
+                            char *args[] = { "xdg-open" , file_name , NULL} ;
+                            execvp( *args , args ) ;
+                        }
+                        else 
+                        {
+                            char *args[] = { "gedit" , file_name , NULL} ;
+                            execvp( *args , args ) ;
+                        }
+                        exit(0) ;
+                    }
                 }
+                // send( sockfd , "\r\n" , 100 , 0 ) ;
             }
             else if (strcmp(status_code, "404") == 0)
             {
@@ -412,28 +460,32 @@ int main()
             send(sockfd, content_type, 100, 0);
 
             send(sockfd, file_name, 100, 0);
+            send( sockfd , "\r\n" , 100 , 0) ;
             // char status_code[100] ;
             char version[100];
             char status_code[100];
             char status_message[100];
             recv(sockfd, version, 100, 0);
-            printf("version %s\n", version);
+            printf("Version :  %s\n", version);
             recv(sockfd, status_code, 100, 0);
+            printf("Status code : %s\n",status_code);
             if (strcmp(status_code, "200") == 0)
             {
                 recv(sockfd, status_message, 100, 0);
                 printf("Status message : %s\n", status_message);
                 FILE *fp3 = fopen(file_name, "r");
-                char line_buff[1000];
+                char line_buff[100];
                 int line_len;
-                while ((line_len = fread(line_buff, 1, 1000, fp3)) > 0)
+                while ((line_len = fread(line_buff, 1, 100, fp3)) > 0)
                 {
-                    printf("%s %d\n", line_buff, line_len);
+                    // printf("%s %d\n", line_buff, line_len);
                     // send(sockfd, line_buff, line_len, 0);
-                    send_str( sockfd , line_buff) ;
-                    for( int i = 0 ; i < 1000 ; i++ )line_buff[i] = '\0' ;
+                    // printf("send %d\n",line_len);
+                    send( sockfd , line_buff , line_len , 0) ;
+                    for( int i = 0 ; i < 100 ; i++ )line_buff[i] = '\0' ;
                 }
                 fclose(fp3);
+                // send( sockfd , "\r\n" , 100 , 0 ) ;
             }
             else if (strcmp(status_code, "404") == 0)
             {
