@@ -348,8 +348,8 @@ int main()
                 printf("%s\n", content_lang);
                 char buff1[100];
                 recv(sockfd, buff1, 100, 0);
-                char server_reply[1000];
-                for (int i = 0; i < 1000; i++)
+                char server_reply[100];
+                for (int i = 0; i < 100 ; i++)
                     server_reply[i] = '\0';
                 FILE *fp = fopen(file_name, "w");
                 if (fp != NULL)
@@ -357,11 +357,11 @@ int main()
                     // printf("Yes %s\n",server_reply);
                     int read_size ;
                     // printf("read %d\n", read_size);
-                    while ((read_size = recv(sockfd, server_reply , 1000 , 0 )) > 0)
+                    while ((read_size = recv(sockfd, server_reply , 100 , 0 )) > 0)
                     {
                         // printf("%s %d\n", server_reply, read_size);
                         fwrite(server_reply, 1, read_size, fp);
-                        for (int i = 0; i < 1000; i++)
+                        for (int i = 0; i < 100 ; i++)
                             server_reply[i] = '\0';
                         // read_size = recv_str(sockfd, server_reply);
                     }

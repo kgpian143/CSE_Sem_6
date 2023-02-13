@@ -339,14 +339,14 @@ int main()
 
 						// Send the file contents
 						// printf("FILE CONTENT...\n");
-						char read_line[1000];
-						while ((length = fread(read_line, 1, 1000, fp)) > 0)
+						char read_line[100];
+						while ((length = fread(read_line, 1, 100, fp)) > 0)
 						{
 							// printf("%s\n", read_line);
-							send(newsockfd, read_line , 1000 , 0 );
+							send(newsockfd, read_line , 100 , 0 );
 							// send_str(newsockfd, read_line);
 							// printf("sent: %s\n", read_line);
-							for(int i=0; i<1000; i++) read_line[i]='\0';
+							for(int i=0; i<100; i++) read_line[i]='\0';
 						}
 					}
 
