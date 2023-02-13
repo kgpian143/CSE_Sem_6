@@ -13,12 +13,13 @@
 
 #include <time.h>
 
-#define CHUNK_SIZE 10
+#define CHUNK_SIZE 100
 
-void send_str(int sockfd, char str[20000])
+void send_str(int sockfd, char str[1000])
 {
     int flag = 0, ind1 = 0, ind2 = 0;
-    char buf[CHUNK_SIZE];
+    char buf[CHUNK_SIZE + 5];
+    for( int i = 0 ; i < 105 ; i++ )buf[i] = '\0' ; 
     while (1)
     {
         if (ind1 == CHUNK_SIZE)
@@ -44,18 +45,20 @@ void send_str(int sockfd, char str[20000])
     }
 }
 
-void recv_str(int sockfd, char str[20000])
+int recv_str(int sockfd, char str[1000])
 {
     int flag = 0;
-    char buf[100];
-    for (int i = 0; i < 100; i++)
+    char buf[105];
+    for (int i = 0; i < 105; i++)
         buf[i] = '\0';
     recv(sockfd, buf, CHUNK_SIZE, 0);
-    strcpy(str, buf);
+    // printf("%s\n",buf) ;
+    strcpy(str, "\0");
     for (int i = 0; i < CHUNK_SIZE; i++)
     {
         if (buf[i] == '\0')
         {
+            strcat(str, buf);
             flag = 1;
             break;
         }
@@ -74,11 +77,14 @@ void recv_str(int sockfd, char str[20000])
         if (flag == 0)
         {
             strcat(str, buf);
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 105; i++)
                 buf[i] = '\0';
             recv(sockfd, buf, CHUNK_SIZE, 0);
+            // printf("%s\n",buf) ;
+
         }
     }
+    return strlen(str);
 }
 
 int main()
@@ -119,7 +125,7 @@ int main()
         // printf("\n\n");
         char url[100], ip[100], port[20];
         char file_name[100];
-        int url_index = 0, ip_index = 0, flag1 = 0 , flag3 = 0 ;
+        int url_index = 0, ip_index = 0, flag1 = 0, flag3 = 0;
         for (int i = 0; i < 100; i++)
             ip[i] = '\0';
         for (int i = index; i < strlen(cmd); i++)
@@ -128,6 +134,8 @@ int main()
                 flag1++;
             if (cmd[i] == ' ')
             {
+                for (int k = 0; k < 100; k++)
+                    file_name[k] = '\0';
                 for (int j = i + 1; j < strlen(cmd); j++)
                     file_name[j - i - 1] = cmd[j];
                 break;
@@ -135,15 +143,15 @@ int main()
 
             if (cmd[i] == ':')
             {
-                // int j = i ; 
-                for (int j = i + 1; j < strlen(cmd); j++)
-                    port[j - i - 1] = cmd[j] ;
-                flag3++ ; 
+                // int j = i ;
+                for (int j = i + 1; cmd[j] != '\0' && cmd[j] != ' '; j++)
+                    port[j - i - 1] = cmd[j];
+                flag3++;
                 // break;
             }
             if (flag1 == 0)
                 ip[ip_index++] = cmd[i];
-            else if( flag3 == 0 )
+            else if (flag3 == 0)
                 url[url_index++] = cmd[i];
             // url_index++;
         }
@@ -153,6 +161,7 @@ int main()
             perror("Unable to create socket\n");
             exit(0);
         }
+        // printf("%s ...\n",port);
         if (strlen(port) == 0)
             strcpy(port, "80");
         printf("%s %s\n", ip, port);
@@ -166,7 +175,7 @@ int main()
             perror("Unable to connect to server\n");
             exit(0);
         }
-        // printf("%s\n", url);
+        printf("%s\n", url);
         send(sockfd, method, 100, 0);
         send(sockfd, url, 100, 0);
         char protocol_version[100];
@@ -191,7 +200,7 @@ int main()
             }
         }
         Host[ind] = '\0';
-        // printf("%s\n", Host);
+        printf("%s\n", Host);
         send(sockfd, Host, 100, 0);
 
         char Connection[100];
@@ -297,16 +306,16 @@ int main()
         send(sockfd, Accept_Language, 100, 0);
 
         char If_Modified_Since[100];
-        strcpy(If_Modified_Since, "If-Modified-Since: ");
+        // strcpy(If_Modified_Since, "If-Modified-Since: ");
         timeinfo = gmtime(&modified_time);
         char buff1[80];
         strftime(buff1, 80, "%a, %d %b %Y %H:%M:%S GMT", timeinfo);
-        strcat(If_Modified_Since, buff1);
+        strcpy(If_Modified_Since, buff1);
         // printf("%s\n", If_Modified_Since);
         send(sockfd, If_Modified_Since, 100, 0);
 
         int k = 0;
-        
+
         if (strcmp(method, "GET") == 0)
         {
             for (int i = 0; url[i] != '\0'; i++)
@@ -330,7 +339,7 @@ int main()
             if (strcmp(status_code, "200") == 0)
             {
                 recv(sockfd, status_message, 100, 0);
-                printf("Status message : %s\n",status_message) ;
+                printf("Status message : %s\n", status_message);
                 char expire_time[100];
                 recv(sockfd, expire_time, 100, 0);
                 printf("Expires time : %s\n", expire_time);
@@ -339,26 +348,45 @@ int main()
                 printf("%s\n", content_lang);
                 char buff1[100];
                 recv(sockfd, buff1, 100, 0);
-                char server_reply[8196];
+                char server_reply[1000];
+                for (int i = 0; i < 1000; i++)
+                    server_reply[i] = '\0';
                 FILE *fp = fopen(file_name, "w");
                 if (fp != NULL)
                 {
-                    int read_size;
-                    while ((read_size = recv(sockfd, server_reply, 8196, 0)) > 0)
+                    // printf("Yes %s\n",server_reply);
+                    int read_size ;
+                    // printf("read %d\n", read_size);
+                    while ((read_size = recv(sockfd, server_reply , 1000 , 0 )) > 0)
                     {
+                        // printf("%s %d\n", server_reply, read_size);
                         fwrite(server_reply, 1, read_size, fp);
+                        for (int i = 0; i < 1000; i++)
+                            server_reply[i] = '\0';
+                        // read_size = recv_str(sockfd, server_reply);
                     }
                     fclose(fp);
                 }
             }
-            else if( strcmp(status_code , "404") == 0 )
+            else if (strcmp(status_code, "404") == 0)
             {
-                printf("Request is not found\n") ;
+                // printf("Request is not found\n") ;
+                // char stat_message[100] ;
+                recv(sockfd, status_message, 100, 0);
+                printf("%s\n", status_message);
             }
 
-            else if( strcmp( status_code , "400" ) == 0 )
+            else if (strcmp(status_code, "400") == 0)
             {
-                printf("Permission denied for the request\n") ;
+                // printf("Permission denied for the request\n") ;
+                recv(sockfd, status_message, 100, 0);
+                printf("%s\n", status_message);
+            }
+            else if (strcmp(status_code, "403") == 0)
+            {
+                // printf("Permission denied for the request\n") ;
+                recv(sockfd, status_message, 100, 0);
+                printf("%s\n", status_message);
             }
         }
         else if (strcmp(method, "PUT") == 0)
@@ -366,17 +394,19 @@ int main()
             char content_language[100];
             strcpy(content_language, "Content Lang : en-us");
             send(sockfd, content_language, 100, 0);
-            FILE *fp = fopen(file_name, "r");
-            if (fseek(fp, 0, SEEK_END) != 0)
+            // printf("Meena %s\n",file_name) ;
+            FILE *fp2 = fopen(file_name, "r");
+            if (fseek(fp2, 0, SEEK_END) != 0)
             {
                 perror("fseek");
-                fclose(fp);
+                fclose(fp2);
                 return 1;
             }
-            fclose(fp);
-            long long int length = ftell(fp);
+            long long int length = ftell(fp2);
+            fclose(fp2);
             char content_length[100];
             sprintf(content_length, "%lld", length);
+            // printf("content length : %s\n",content_length) ;
             send(sockfd, content_length, 100, 0);
 
             send(sockfd, content_type, 100, 0);
@@ -388,28 +418,41 @@ int main()
             char status_message[100];
             recv(sockfd, version, 100, 0);
             printf("version %s\n", version);
-            recv( sockfd , status_code , 100 , 0 ) ; 
-            if(  strcmp( status_code , "200") == 0  )
+            recv(sockfd, status_code, 100, 0);
+            if (strcmp(status_code, "200") == 0)
             {
                 recv(sockfd, status_message, 100, 0);
-                printf("Status message : %s\n",status_message) ;
-                fp = fopen(file_name, "r");
-                char line_buff[8196];
+                printf("Status message : %s\n", status_message);
+                FILE *fp3 = fopen(file_name, "r");
+                char line_buff[1000];
                 int line_len;
-                while ((line_len = fread(line_buff, 1, 8196, fp)) > 0)
+                while ((line_len = fread(line_buff, 1, 1000, fp3)) > 0)
                 {
-                    send(sockfd, line_buff, line_len, 0);
+                    printf("%s %d\n", line_buff, line_len);
+                    // send(sockfd, line_buff, line_len, 0);
+                    send_str( sockfd , line_buff) ;
+                    for( int i = 0 ; i < 1000 ; i++ )line_buff[i] = '\0' ;
                 }
+                fclose(fp3);
             }
-            else if( strcmp(status_code , "404") == 0)
+            else if (strcmp(status_code, "404") == 0)
             {
-               printf("The directory you want to access is not found\n" ) ;
+                //    printf("The directory you want to access is not found\n" ) ;
+                recv(sockfd, status_message, 100, 0);
+                printf("%s\n", status_message);
             }
-            else if( strcmp( status_code , "400" ) == 0 )
+            else if (strcmp(status_code, "400") == 0)
             {
-                printf("Permission denied for the request\n") ;
+                // printf("Permission denied for the request\n") ;
+                recv(sockfd, status_message, 100, 0);
+                printf("%s\n", status_message);
             }
-
+            else if (strcmp(status_code, "403") == 0)
+            {
+                // printf("Permission denied for the request\n") ;
+                recv(sockfd, status_message, 100, 0);
+                printf("%s\n", status_message);
+            }
         }
 
         close(sockfd);
