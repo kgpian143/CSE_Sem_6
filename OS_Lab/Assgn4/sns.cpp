@@ -1,64 +1,91 @@
 #include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 #include <time.h>
 #include <sys/time.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include<pthread.h>
+#include <pthread.h>
 
-using namespace std;
+
 #define mod 1000000007
 #define total_users 37700
 #define total_edges 289003
+#define ordered_set tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> //
+
+using namespace __gnu_pbds;
+using namespace std;
+
+
+// struct action
 struct action
 {
     int user_id;
     int action_id;
     int action_type;
     time_t time_stamp;
+    int priority;
 };
-struct cmp
-{ 
+
+struct cmp1 // comparator for priority queue
+{
     bool operator()(action a, action b)
     {
-        if( a.time_stamp == b.time_stamp)
-        {
-            if( a.action_type == b.action_type)
-            {
-                return a.action_id > b.action_id;
-            }
-            return a.action_type > b.action_type;
-        }
         return a.time_stamp > b.time_stamp;
     }
 };
+
+struct cmp2 //
+{
+    bool operator()(action a, action b)
+    {
+        return a.priority > b.priority;
+    }
+};
+
+// Node class for user
 class Node
 {
 public:
     int id;
     int action_cnt[3];
-    int order;        // 0 for priority and 1 for chronological
-    queue<action> wq; // wall queue for user
-    priority_queue<action, vector<action>, cmp> fq; // feed queue for user
+    int order;                                        // 0 for priority and 1 for chronological
+    queue<action> wq;                                 // wall queue for user
+    priority_queue<action, vector<action>, cmp1> fq1; // feed queue for user
+    priority_queue<action, vector<action>, cmp2> fq2; // feed queue for user
     Node()
     {
-        // this->id = id;
         this->order = rand() % 2;
         this->action_cnt[0] = 0;
         this->action_cnt[1] = 0;
         this->action_cnt[2] = 0;
-        this->wq = queue<action>();
-        this->fq = priority_queue<action, vector<action>, cmp>();
     }
 };
 map<int, set<int>> graph;
-map< pair< int, int > , int > neighbours;
-vector<Node> User(total_users , Node());
+map<pair<int, int>, int> neighbours;
+vector<Node> User(total_users, Node());
 map<int, int> degree;
 map<int, string> actions_types;
+
+
 queue<action> shared_queue;
-unordered_set<int> cfq;
+pthread_mutex_t shared_queue_lock;
+pthread_cond_t shared_queue_cond;
+int shared_queue_size = 0;
+
+ordered_set cfq;
+pthread_mutex_t cfq_lock;
+pthread_cond_t cfq_cond;
+int cfq_size = 0;
+
+pthread_mutex_t feed_queue_lock[total_users];
+int feed_queue_size[total_users];
+// pthread_cond_t feed_queue_cond;
+
+FILE *outputfile = fopen("sns.log", "wb");
+
 void printgraph()
 {
     ofstream out("graph_out.txt");
@@ -71,120 +98,195 @@ void printgraph()
         }
         out << endl;
     }
-    // for( auto it : User)
-    // {
-    //     out << "User " << it.first << " : " << it.second->order << endl;
-    // }
     out.close();
 }
-/* calculate_common_neighbours 
-*  calculate common neighbours of two nodes using set intersection 
-*/
-void calculate_common_neigbours( int u , int v)
+
+void printFunc( char *buff )
 {
-    int cnt = 0 ;
-    for( auto it : graph[u])
+     int buff_size = sizeof(char) * strlen(buff);
+     fwrite(buff, sizeof(char), buff_size, outputfile);
+     fwrite(buff, sizeof(char), buff_size, stdout);
+}
+void calculate_common_neigbours(int u, int v)
+{
+    int cnt = 0;
+    for (auto it : graph[u])
     {
-        if( graph[v].find(it) != graph[v].end())
+        if (graph[v].find(it) != graph[v].end())
         {
             cnt++;
         }
     }
-    neighbours[make_pair(u,v)] = cnt;
-    neighbours[make_pair(v,u)] = cnt;
+    neighbours[make_pair(u, v)] = cnt;
+    neighbours[make_pair(v, u)] = cnt;
 }
-void *userSimulator( void *)
+void *userSimulator(void *)
 {
-    // while (1)
-    // {
-        ofstream out("sns.log", ios ::app);
-        out << "<---  User Simulator thread open  --->" << endl;
-        set<int> nodes;// set of nodes to be selected
-        while (nodes.size() < 100)
+    char buff[100] ;
+    while (1)
+    {
+    set<int> nodes; // set of nodes to be selected
+    while (nodes.size() < 100)
+    {
+        int random_node = rand() % total_users;
+        sprintf(buff, "random_node : %d \n", random_node);
+        int buff_size = sizeof(char) * strlen(buff);
+        fwrite(buff, sizeof(char), buff_size, stdout);
+        nodes.insert(random_node);
+    }
+    for (auto it : nodes)
+    {
+        sprintf(buff, "User %d : Do following actions : \n", it);
+        printFunc(buff);
+        if (degree[it] == 0)
+            continue;
+        int n = log2(degree[it]) + 1;
+        for (int i = 0; i < n; i++)
         {
-            int random_node = rand() % total_users ;
-            cout << random_node << endl ;
-            nodes.insert(random_node);
+            int r = rand() % 3;
+            action act;
+            act.action_id = User[it].action_cnt[r] + 1;
+            User[it].action_cnt[r] += 1;
+            act.action_type = r;
+            act.time_stamp = time(NULL); // time stamp
+            act.user_id = it;
+            User[it].wq.push(act);
+
+            // ****** Critical Section ****** //
+
+            pthread_mutex_lock(&shared_queue_lock);
+            shared_queue.push(act);
+            shared_queue_size++ ; 
+            pthread_cond_signal(&shared_queue_cond);
+            pthread_mutex_unlock(&shared_queue_lock);
+
+            // ****** Critical Section ****** //
+
+            sprintf(buff, "\tuser action : %s %d on %s", actions_types[r].c_str(), act.action_id, ctime(&act.time_stamp));
+            printFunc(buff);
         }
-        for (auto it : nodes)
+        for (auto itr : graph[it])
         {
-            out << "User " << it << " : Do following actions : " << endl;
-            // cout << "User " << it  << " : Do following actions : " << endl ;
-            if (degree[it] == 0)
-                continue;
-            int n = log2(degree[it]) + 1;
-            for (int i = 0; i < n; i++)
-            {
-                int r = rand() % 3;
-                action act;
-                act.action_id = User[it].action_cnt[r] + 1 ;
-                User[it].action_cnt[r] += 1 ;
-                // User[it].action_cnt[r]++;
-                act.action_type = r;
-                act.time_stamp = time(NULL); // time stamp
-                act.user_id = it;
-                User[it].wq.push(act);
-                shared_queue.push(act);
-                out << "\tuser action : " << actions_types[r] << " " << act.action_id << " on " << ctime(&act.time_stamp);
-            }
-        }
-        out.close();
-        // sleep(120);// 
-    // }
+            calculate_common_neigbours(it, itr);
+        };
+    }
+    sleep(20);//
+    }
     pthread_exit(NULL);
 }
 
-void *pushUpdate( void *) // push update to feed queue
+void *pushUpdate(void *) // push update to feed queue
 {
-    ofstream out("sns.log", ios ::app); // open file in append mode
-    out << "<---  pushUpdate thread open --->" << endl;
+    char buff[100];
     while (1)
     {
-        if (shared_queue.empty())
-            continue;
+        //********** Critical Section Start **********//
+        pthread_mutex_lock(&shared_queue_lock);
+        while ( shared_queue_size == 0 )
+        {
+            pthread_cond_wait(&shared_queue_cond, &shared_queue_lock);
+        }
         action act = shared_queue.front();
         shared_queue.pop();
-        // out << "\tPushing update to feed queue of neighbours of user " << act.user_id << endl;
+        shared_queue_size-- ;
+        pthread_mutex_unlock(&shared_queue_lock);
+        //********** Critical Section End **********//
+
+
         for (auto it : graph[act.user_id])
         {
-            User[it].fq.push(act);
+            act.priority = neighbours[make_pair(act.user_id, it)];
+
+            //********** Critical Section Start **********//
+
+            pthread_mutex_lock(&feed_queue_lock[it]);
+            if (User[it].order)
+                User[it].fq2.push(act);
+            else
+                User[it].fq1.push(act);
+            feed_queue_size[it]++; 
+            sprintf(buff, "\tPushing update from user : %d to feed queue of user : %d \n ", act.user_id, it);
+            printFunc(buff);
+            pthread_mutex_unlock(&feed_queue_lock[it]);
+
+            //********** Critical Section End**********//
+            
+
+
+            //********** Critical Section Start**********//
+
+            pthread_mutex_lock(&cfq_lock);
             cfq.insert(it);
-            out << "\tPushing update from user : " << act.user_id << " to feed queue of user : " << it << endl;
+            cfq_size++ ;
+            pthread_cond_signal(&cfq_cond);
+            pthread_mutex_unlock(&cfq_lock);
+
+            //********** Critical Section End**********//
         }
     }
     pthread_exit(NULL);
 }
 
-void *readPost( void *) // feed update to user
+void *readPost(void *) // feed update to user
 {
-    ofstream out("sns.log", ios ::app); // open file in append mode
-    out << " readPost thread open " << endl;
-    while (!cfq.empty())
+    char buff[100];
+    while (1)
     {
-        auto it = cfq.begin();
-        while (!User[*it].fq.empty())// 
+        //********** Critical Section Start**********//
+        pthread_mutex_lock(&cfq_lock);
+        while (cfq_size == 0)
         {
-            action act = User[*it].fq.top();
-            User[*it].fq.pop();
-            // “I read action number XX of type YY posted by user ZZ at time TT”
-            out << "\tI read action number " << act.action_id << " of type " << actions_types[act.action_type] << " posted by user " << *it << " at time " << ctime(&act.time_stamp) << endl;
-            // cout << "\tI read action number " << act.action_id << " of type " << actions_types[act.action_type] << " posted by user " << *it << " at time " << ctime(&act.time_stamp) << endl;
+            pthread_cond_wait(&cfq_cond, &cfq_lock);
         }
+        // if( cfq_size == 0 )continue;
+        int k = rand() % cfq.size();
+        auto it = cfq.find_by_order(k);
+        cfq.erase(it); // remove user from cfq
+        cfq_size-- ;
+        pthread_mutex_lock(&feed_queue_lock[*it]);
+        if (User[*it].order)
+        {
+            while (!User[*it].fq2.empty()) //
+            {
+                action act = User[*it].fq2.top();
+                User[*it].fq2.pop();
+                feed_queue_size[*it]-- ;
+                sprintf( buff , "\tI read action number %d of type %s posted by user %d at time %s \n", act.action_id, (char *)actions_types[act.action_type].c_str(), *it, ctime(&act.time_stamp) );
+                printFunc(buff);
+            }
+        }
+        else
+        {
+            while (!User[*it].fq1.empty()) //
+            {
+                action act = User[*it].fq1.top();
+                User[*it].fq1.pop();
+                feed_queue_size[*it]-- ;
+                sprintf( buff , "\tI read action number %d of type %s posted by user %d at time %s \n", act.action_id, (char *)actions_types[act.action_type].c_str() , *it, ctime(&act.time_stamp) );
+                printFunc(buff);
+            }
+        }
+        pthread_mutex_unlock(&feed_queue_lock[*it]);
+        //********** Critical Section End**********//
+
+        // pthread_mutex_lock(&cfq_lock);
+        
+        // pthread_mutex_unlock(&cfq_lock);
     }
     pthread_exit(NULL);
 }
 signed main()
 {
     srand(time(NULL));
+    setvbuf(outputfile , NULL, _IONBF, 0);
     ios::sync_with_stdio(false);
     cin.tie(0);
     actions_types[0] = "post";
     actions_types[1] = "comment";
     actions_types[2] = "like";
-    ofstream out_sns("sns.log");
-    out_sns << "Main thread awoke " << endl;
-    out_sns.close();
-
+    char buff[100] ;
+    sprintf(buff , "Main thread awoke\n" ) ;
+    printFunc(buff) ; //
     ifstream inp("musae_git_edges.csv");
     string line;
 
@@ -193,19 +295,15 @@ signed main()
     while (getline(inp, line))
     {
         int u, v;
-        // cout << line ;
         int ind = line.find(",");
         u = (int)stoi(line.substr(0, ind));
         v = (int)stoi(line.substr(ind + 1));
-        // static Node temp(1);
         if (graph.find(u) != graph.end())
         {
-            // Node x(u);
             User[u].id = u;
         }
-        if (graph.find(u) != graph.end())
+        if (graph.find(v) != graph.end())
         {
-            // Node y(v);
             User[v].id = v;
         }
         degree[u]++;
@@ -214,10 +312,8 @@ signed main()
         graph[v].insert(u);
     }
 
-    // printgraph();
     pthread_t userSimulator_thread, pushUpdate_thread[25], readPost_thread[10];
-    pthread_create(&userSimulator_thread, NULL , userSimulator, NULL);
-    pthread_join(userSimulator_thread, NULL);
+    pthread_create(&userSimulator_thread, NULL, userSimulator, NULL);
     for (int i = 0; i < 25; i++)
     {
         pthread_create(&pushUpdate_thread[i], NULL, pushUpdate, NULL);
@@ -226,6 +322,7 @@ signed main()
     {
         pthread_create(&readPost_thread[i], NULL, readPost, NULL);
     }
+    pthread_join(userSimulator_thread, NULL);
     for (int i = 0; i < 25; i++)
     {
         pthread_join(pushUpdate_thread[i], NULL);
@@ -234,5 +331,7 @@ signed main()
     {
         pthread_join(readPost_thread[i], NULL);
     }
+    fclose(outputfile) ;
+    // pthread_attr_destroy(&userSimulator);
     return 0;
 }
