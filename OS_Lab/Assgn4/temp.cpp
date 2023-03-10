@@ -133,12 +133,14 @@ void *userSimulator(void *)
     while (nodes.size() < 100)
     {
         int random_node = rand() % total_users;
-        sprintf(buff, "User_Simulator_Thread :: Selected Node: %d \n", random_node);
-        printFunc(buff);
+        sprintf(buff, "random_node : %d \n", random_node);
+        int buff_size = sizeof(char) * strlen(buff);
+        fwrite(buff, sizeof(char), buff_size, stdout);
         nodes.insert(random_node);
     }
     for (auto it : nodes)
     {
+        sprintf(buff, "User %d : Do following actions : \n", it);
         printFunc(buff);
         if (degree[it] == 0)
             continue;
@@ -154,7 +156,7 @@ void *userSimulator(void *)
             act.user_id = it;
             User[it].wq.push(act);
 
-            // Critical Section Start
+            // ****** Critical Section ****** //
 
             pthread_mutex_lock(&shared_queue_lock);
 
@@ -164,9 +166,9 @@ void *userSimulator(void *)
 
             pthread_mutex_unlock(&shared_queue_lock);
 
-            // Critical Section End
+            // ****** Critical Section ****** //
 
-            sprintf(buff, "User_Simulator_Thread :: User %d take action : %s %d on %s", it ,  actions_types[r].c_str(), act.action_id, ctime(&act.time_stamp));
+            sprintf(buff, "\tuser action : %s %d on %s", actions_types[r].c_str(), act.action_id, ctime(&act.time_stamp));
             printFunc(buff);
         }
         for (auto itr : graph[it])
@@ -174,7 +176,7 @@ void *userSimulator(void *)
             calculate_common_neigbours(it, itr);
         };
     }
-    sleep(120);//
+    sleep(20);//
     }
     pthread_exit(NULL);
 }
@@ -184,7 +186,7 @@ void *pushUpdate(void *) // push update to feed queue
     char buff[100];
     while (1)
     {
-        // Critical Section Start
+        //********** Critical Section Start **********//
         pthread_mutex_lock(&shared_queue_lock);
 
         while ( shared_queue_size == 0 )
@@ -193,18 +195,18 @@ void *pushUpdate(void *) // push update to feed queue
         }
         action act = shared_queue.front();
         shared_queue.pop();
+        // printFunc(()"size decreased\n");
         shared_queue_size-- ;
 
         pthread_mutex_unlock(&shared_queue_lock);
-
-        // Critical Section End
+        //********** Critical Section End **********//
 
 
         for (auto it : graph[act.user_id])
         {
             act.priority = neighbours[make_pair(act.user_id, it)];
 
-            //  Critical Section Start
+            //********** Critical Section Start **********//
 
             pthread_mutex_lock(&feed_queue_lock[it]);
             
@@ -213,16 +215,16 @@ void *pushUpdate(void *) // push update to feed queue
             else
                 User[it].fq1.push(act);
             feed_queue_size[it]++; 
-            sprintf(buff, "Push_Update_Thread :: Update from user : %d to feed queue of user : %d \n", act.user_id, it);
+            sprintf(buff, "\tPushing update from user : %d to feed queue of user : %d \n ", act.user_id, it);
             printFunc(buff);
 
             pthread_mutex_unlock(&feed_queue_lock[it]);
 
-            // Critical Section End
+            //********** Critical Section End**********//
             
 
 
-            //  Critical Section Start
+            //********** Critical Section Start**********//
 
             pthread_mutex_lock(&cfq_lock);
             
@@ -232,7 +234,7 @@ void *pushUpdate(void *) // push update to feed queue
 
             pthread_mutex_unlock(&cfq_lock);
 
-            // Critical Section End
+            //********** Critical Section End**********//
         }
     }
     pthread_exit(NULL);
@@ -243,13 +245,14 @@ void *readPost(void *) // feed update to user
     char buff[100];
     while (1)
     {
-        //  Critical Section Start
+        //********** Critical Section Start**********//
         pthread_mutex_lock(&cfq_lock);
 
         while (cfq_size == 0)
         {
             pthread_cond_wait(&cfq_cond, &cfq_lock);
         }
+        // if( cfq_size == 0 )continue;
         int k = rand() % ((int)cfq_size);
         int fr = cfq.front();
         cfq.pop();
@@ -257,9 +260,7 @@ void *readPost(void *) // feed update to user
 
         pthread_mutex_unlock(&cfq_lock);
         
-        // Critical Section End
 
-        //  Critical Section Start
         pthread_mutex_lock(&feed_queue_lock[fr]);
         if (User[fr].order)
         {
@@ -268,7 +269,7 @@ void *readPost(void *) // feed update to user
                 action act = User[fr].fq2.top();
                 User[fr].fq2.pop();
                 feed_queue_size[fr]-- ;
-                sprintf( buff , "Read_Post_Thread ::I read action number %d of type %s posted by user %d at time %s", act.action_id, (char *)actions_types[act.action_type].c_str(), fr, ctime(&act.time_stamp) );
+                sprintf( buff , "\tI read action number %d of type %s posted by user %d at time %s \n", act.action_id, (char *)actions_types[act.action_type].c_str(), fr, ctime(&act.time_stamp) );
                 printFunc(buff);
             }
         }
@@ -279,12 +280,16 @@ void *readPost(void *) // feed update to user
                 action act = User[fr].fq1.top();
                 User[fr].fq1.pop();
                 feed_queue_size[fr]-- ;
-                sprintf( buff , "Read_Post_Thread ::I read action number %d of type %s posted by user %d at time %s", act.action_id, (char *)actions_types[act.action_type].c_str() , fr, ctime(&act.time_stamp) );
+                sprintf( buff , "\tI read action number %d of type %s posted by user %d at time %s \n", act.action_id, (char *)actions_types[act.action_type].c_str() , fr, ctime(&act.time_stamp) );
                 printFunc(buff);
             }
         }
         pthread_mutex_unlock(&feed_queue_lock[fr]);
-        // Critical Section End
+        //********** Critical Section End**********//
+
+        // pthread_mutex_lock(&cfq_lock);
+        
+        // pthread_mutex_unlock(&cfq_lock);
     }
     pthread_exit(NULL);
 }
@@ -310,7 +315,7 @@ signed main()
     actions_types[1] = "comment";
     actions_types[2] = "like";
     char buff[100] ;
-    sprintf(buff , "Main_Thread ::Main thread awoke\n" ) ;
+    sprintf(buff , "Main thread awoke\n" ) ;
     printFunc(buff) ; //
     ifstream inp("musae_git_edges.csv");
     string line;
@@ -357,15 +362,7 @@ signed main()
         pthread_join(readPost_thread[i], NULL);
     }
     fclose(outputfile) ;
+    // pthread_attr_destroy(&userSimulator);
 
-    // pthread destroy
-    pthread_cond_destroy(&shared_queue_cond);
-    pthread_cond_destroy(&cfq_cond);
-    pthread_mutex_destroy(&shared_queue_lock);
-    pthread_mutex_destroy(&cfq_lock);
-    for (int i = 0; i < 100; i++)
-    {
-        pthread_mutex_destroy(&feed_queue_lock[i]);
-    }
     return 0;
 }
