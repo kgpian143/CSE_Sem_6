@@ -369,3 +369,4 @@ signed main()
     }
     return 0;
 }
+// g++ -pthread -std=c++11 -o a.out main.cpp

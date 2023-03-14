@@ -176,10 +176,10 @@ int main(int argc, char **argv)
         int m = *total_nodes - c;
         if (m == 0)
         {
-            cout << "vinod" << endl  ;
+            // cout << "vinod" << endl  ;
             continue;
         }
-        cout << "vinod" << endl  ;
+        // cout << "vinod" << endl  ;
         a = (((atoi(argv[5]) - 1) * (m))) / 10 + c + 1;
         b = ((atoi(argv[5]) * (m))) / 10 + c;
         for (int i = d + 1; i <= *total_edges; i++)

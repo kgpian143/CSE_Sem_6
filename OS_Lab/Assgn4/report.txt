@@ -1,0 +1,42 @@
+
+We are writing a program that uses threads to simulate a social media platform. We have to implement a feed update system that will update the feed of a user whenever a user posts, comments or likes an action. The feed update system should be able to handle a large number of users and actions. We have to implement the feed update system using a priority queue and a conditional variable. We have to implement the following functions:1. userSimulator: This function will simulate the users of the social media platform. It will create a new action and add it to the shared queue.2. pushUpdate: This function will simulate the feed update system. It will read an action from the shared queue and add it to the feed queue of the users who are following the user who created the action.3. readPost: This function will simulate the users who are reading the feed of other users. It will read an action from the feed queue of a user and print it on the console. We have to implement the feed update system using a priority queue and a conditional variable. We have to implement the following functions:1. userSimulator: This function will simulate the users of the social media platform. It will create a new action and add it to the shared queue.2. pushUpdate: This function will simulate the feed update system. It will read an action from the shared queue and add it to the feed queue of the users who are following the user who created the action.3. readPost: This function will simulate the users who are reading the feed of other users. It will read an action from the feed queue of a user and print it on the console. We have to implement the feed update system using a priority queue and a conditional variable. We have to implement the following functions:1. userSimulator: This function will simulate the users of the social media platform. It will create a new action and add it to the shared queue.2. pushUpdate: This function will simulate the feed update system. It will read an action from the shared queue and add it to the feed queue of the users who are following the user who created the action.3. readPost: This function will simulate the users who are reading the feed of other users. It will read an action from the feed queue of a user and print it on the console. We have to implement the feed update system using a priority queue and a conditional variable. We have to implement the following functions:1
+
+Data structure used in above code :
+   we use map to store the graph of users and their neighbours .
+    we use vector to store the users .
+    we use priority queue to store the actions in the shared queue and feed queue .
+    we use mutex to lock the shared queue and feed queue .
+    we use conditional variable to wait for the shared queue to be empty .
+
+locks used in above code :
+    we use mutex to lock the shared queue and feed queue .
+    we use conditional variable to wait for the shared queue to be empty .
+    Locks maintain mutual exclusion by suspending the execution of a thread until the lock is acquired.
+    The lock is released when the thread exits the critical section.
+    We use a lock to protect the shared queue and the feed queue.
+    The shared queue is protected by the shared_queue_lock.
+    The feed queue is protected by the feed_queue_lock.
+    We use a conditional variable to wait for the shared queue to be empty.
+    We use a conditional variable to wait for the feed queue to be empty.
+
+    
+Priority queue used for feeds of user:
+    We use a priority queue to store the actions in the feed queue of a user.
+    The priority queue is ordered by the timestamp or priority  of node of the actions.
+    priority of node is defines using more common neigbours with the user who created the action .
+    The actions with the latest timestamp or more common neigbours are at the top of the priority queue.
+    The actions with the earliest timestamp or less common neighbours are at the bottom of the priority queue.
+
+We use map of int and set for storing the adjancy list so that at the time of calculating the priority of node we can easily find the common neighbours of the user who created the action and the user who is going to receive the action.
+Common neigbours can be found by using set intersection it takes O(nlogn) time where n is the number of neibours connected with one of user;
+
+We make class Node for stroring the information of user and action taken by him ; 
+
+
+We make struct  compare for comparing the priority of two nodes so that we can use it in priority queue;
+
+user
+
+
+    
+
