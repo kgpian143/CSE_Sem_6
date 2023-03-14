@@ -27,7 +27,6 @@ void find_process_with_open_file(const char *target_file, vector<int> &pids, vec
 
         DIR *fd_dir;
         struct dirent *fd_ent;
-
         fd_dir = opendir(path);
         if (fd_dir != NULL)
         {
@@ -35,14 +34,15 @@ void find_process_with_open_file(const char *target_file, vector<int> &pids, vec
           {
             char link_path[1024];
             snprintf(link_path, sizeof(link_path), "%s/%s", path, fd_ent->d_name);
-
             char buf[1024];
             ssize_t len = readlink(link_path, buf, sizeof(buf) - 1);
             if (len != -1)
             {
+            cout << 2 << endl ;
               buf[len] = '\0';
               if (strcmp(buf, target_file) == 0)
               {
+                cout << 1 << endl ;
                 // Found the process with the target file open
                 pids.push_back(atoi(ent->d_name));
                 char path1[1024];

@@ -1,3 +1,7 @@
+// GROUP : 29 (20CS10074, 20CS30028, 20CS10040, 20CS10061)
+// ASSIGNMENT : 05
+
+
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -23,8 +27,8 @@ using namespace std;
 struct action
 {
     int user_id;
-    int action_id;
     int action_type;
+    int action_id;
     time_t time_stamp;
     int priority;
 };
@@ -268,7 +272,7 @@ void *readPost(void *) // feed update to user
                 action act = User[fr].fq2.top();
                 User[fr].fq2.pop();
                 feed_queue_size[fr]-- ;
-                sprintf( buff , "Read_Post_Thread ::I read action number %d of type %s posted by user %d at time %s", act.action_id, (char *)actions_types[act.action_type].c_str(), fr, ctime(&act.time_stamp) );
+                sprintf( buff , "Read_Post_Thread :: I read action number %d of type %s posted by user %d at time %s", act.action_id, (char *)actions_types[act.action_type].c_str(), fr, ctime(&act.time_stamp) );
                 printFunc(buff);
             }
         }
@@ -279,7 +283,7 @@ void *readPost(void *) // feed update to user
                 action act = User[fr].fq1.top();
                 User[fr].fq1.pop();
                 feed_queue_size[fr]-- ;
-                sprintf( buff , "Read_Post_Thread ::I read action number %d of type %s posted by user %d at time %s", act.action_id, (char *)actions_types[act.action_type].c_str() , fr, ctime(&act.time_stamp) );
+                sprintf( buff , "Read_Post_Thread :: I read action number %d of type %s posted by user %d at time %s", act.action_id, (char *)actions_types[act.action_type].c_str() , fr, ctime(&act.time_stamp) );
                 printFunc(buff);
             }
         }
@@ -310,7 +314,7 @@ signed main()
     actions_types[1] = "comment";
     actions_types[2] = "like";
     char buff[100] ;
-    sprintf(buff , "Main_Thread ::Main thread awoke\n" ) ;
+    sprintf(buff , "Main_Thread ::Main thread wakes up\n" ) ;
     printFunc(buff) ; //
     ifstream inp("musae_git_edges.csv");
     string line;

@@ -94,28 +94,28 @@ int main()
         dup2(saved_stdout, STDOUT_FILENO);
         sleep(3);
         int consumer_count = 10;
-        // for (int i = 0; i < consumer_count; i++)
-        // {
-        //     int pid = fork();
-        //     if (pid == 0)
-        //     {
-        //         string file = "./consumer_out/consumer";
-        //         file.push_back('0' + i);
-        //         file += ".txt";
-        //         // cout << file << endl ;
-        //         int fd = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
-        //         dup2(fd, STDOUT_FILENO);
-        //         // int fd = open(argv[outp].c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        //         char *args[] = {(char *)"./consumer", (char *)to_string(k1).c_str() , (char *)to_string(k2).c_str() , (char *)to_string(k3).c_str() , (char *)to_string(k4).c_str() ,(char *)to_string(i + 1).c_str(), (char *)NULL};
-        //         execvp(*args, args);
-        //         exit(EXIT_SUCCESS);
-        //     }
-        //     else
-        //     {
-        //         // wait(NULL);
-        //         dup2(saved_stdout, STDOUT_FILENO);
-        //     }
-        // }
+        for (int i = 0; i < consumer_count; i++)
+        {
+            int pid = fork();
+            if (pid == 0)
+            {
+                string file = "./consumer_out/consumer";
+                file.push_back('0' + i);
+                file += ".txt";
+                // cout << file << endl ;
+                int fd = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
+                dup2(fd, STDOUT_FILENO);
+                // int fd = open(argv[outp].c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                char *args[] = {(char *)"./consumer", (char *)to_string(k1).c_str() , (char *)to_string(k2).c_str() , (char *)to_string(k3).c_str() , (char *)to_string(k4).c_str() ,(char *)to_string(i + 1).c_str(), (char *)NULL};
+                execvp(*args, args);
+                exit(EXIT_SUCCESS);
+            }
+            else
+            {
+                // wait(NULL);
+                dup2(saved_stdout, STDOUT_FILENO);
+            }
+        }
     }
     for (int i = 0; i < 1; i++)
         wait(NULL);

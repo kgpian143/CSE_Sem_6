@@ -17,12 +17,11 @@ struct edge
 };
 // vector<int> graph[N];
 
-map<pair<int, int>, vector<int>> Path;
-bool check(edge e, int a, int b)
+bool check(edge e)
 {
-    if (e.st > b || e.st < a)
+    if (e.st > end_node || e.st < start_node)
         return false;
-    if (e.end > b || e.end < a)
+    if (e.end > end_node || e.end < start_node)
         return false;
     return true;
 }
@@ -30,65 +29,27 @@ void make_graph(edge *graph_edges, int n, map<int, vector<int>> &graph)
 {
     for (int i = 0; i < n; i++)
     {
-        if (check(graph_edges[i], start_node, end_node))
+        if (check(graph_edges[i]))
         {
             graph[graph_edges[i].st].push_back(graph_edges[i].end);
             graph[graph_edges[i].end].push_back(graph_edges[i].st);
         }
     }
-    // for (int i = start_node; i <=  end_node; i++)
-    // {
-    //     cout << i << " --- > ";
-    //     for (auto it : graph[i])
-    //     {
-    //         cout << it << " ";
-    //     }
-    //     cout << endl;
-    // }
 }
 
-void print_graph(map<int, vector<int>> graph)
+void dijikstra(int src, map<int, vector<int>> graph)
 {
-    for( auto it : graph )
-    {
-        for( auto itr : graph )
-        {
-            if( itr.first == it.first )continue; 
-            int i = it.first ;
-            int j = itr.first ; 
-            
-            if( Path[{ i , j }].size() == 1 )
-            {
-                cout << "There is no path between " << i << " and " << j << endl << endl  ;
-                continue;
-            }
-            else 
-            {
-                cout << " Distance from " << i << " to " << j << " is : " << Path[{ i , j }][0] << endl;
-            }
-            cout << "Path : ";
-            for( int k = 1 ; k < Path[{ i , j }].size() ; k++ )
-            {
-                cout << Path[{ i , j }][k] << " -> " ;
-            }
-            cout << i << endl << endl ;
-        }
-    }
-}
-
-void dijikstra(int src, map<int, vector<int>> graph )
-{
-    // int n = end_node - start_node + 1;
+    int n = end_node - start_node + 1;
     map<int, int> parent;
     map<int, int> distance;
     map<int, bool> vis;
     distance[src] = 0;
-    for (auto it : graph )
+    for (int i = start_node; i <= end_node; i++)
     {
-        if (it.first == src)
+        if (i == src)
             continue;
-        distance[it.first] = INT_MAX;
-        vis[it.first] = false;
+        distance[i] = INT_MAX;
+        vis[i] = false;
     }
     set<pair<int, int>> pq;
     pq.insert({0, src});
@@ -117,25 +78,25 @@ void dijikstra(int src, map<int, vector<int>> graph )
             }
         }
     }
-    for (auto it : graph )
+    for (int i = start_node; i <= end_node; i++)
     {
-        if (src == it.first)
+        if (src >= i)
             continue;
-        Path[{src, it.first}].push_back(distance[it.first]);
-        if (distance[it.first] == INT_MAX)
+        if (distance[i] == INT_MAX)
         {
-            // 
+            // cout << "There is no path between " << src << " and " << i << endl << endl  ;
             continue;
         }
-        //
-        // cout << " Path : ";
-        int k = it.first;
+        cout << " Distance from " << src << " to " << i << " is : " << distance[i] << endl;
+        cout << " Path : ";
+        int k = i;
         while (k != src)
         {
-            // cout << k << " -> ";
-            Path[{src, it.first}].push_back(k);
+            cout << k << " -> ";
             k = parent[k];
         }
+        cout << src << endl
+             << endl;
         // cout << i << "--> " << distance[i] <<  endl ;
     }
 }
@@ -153,69 +114,20 @@ int main(int argc, char **argv)
     int shmid5 = shmget(atoi(argv[4]), 1, IPC_CREAT | 0666);
     int *total_edges = (int *)shmat(shmid5, NULL, 0);
     // cout << " Total nodes  : " << *total_nodes << endl ;
-    start_node = (((atoi(argv[5]) - 1) * (*total_nodes + 1))) / 10;
-    end_node = ((atoi(argv[5]) * (*total_nodes + 1))) / 10 - 1;
-
-    // cout << start_node << " " << end_node << endl ;
-    int a = start_node;
-    int b = end_node;
-    int c = *total_nodes;
-    int d = *total_edges;
-    map<int, vector<int>> graph;
-    make_graph(graph_edges, *total_edges, graph);
-    for (int i = start_node; i < end_node; i++)
-    {
-        dijikstra(i, graph);
-    }
-    print_graph(graph) ;
     while (1)
     {
-        for (int i = 0; i < 50; i++)
-            cout << endl;
-        sleep(10);
-        int m = *total_nodes - c;
-        if (m == 0)
+        start_node = (((atoi(argv[5]) - 1) * (*total_nodes + 1))) / 10;
+        end_node = ((atoi(argv[5]) * (*total_nodes + 1))) / 10 - 1;
+
+        // cout << start_node << " " << end_node << endl ;
+        map<int, vector<int>> graph;
+        make_graph(graph_edges, *total_edges, graph);
+        for (int i = start_node; i < end_node; i++)
         {
-            cout << "vinod" << endl  ;
-            continue;
+            dijikstra(i, graph);
         }
-        cout << "vinod" << endl  ;
-        a = (((atoi(argv[5]) - 1) * (m))) / 10 + c + 1;
-        b = ((atoi(argv[5]) * (m))) / 10 + c;
-        for (int i = d + 1; i <= *total_edges; i++)
-        {
-            if (check(graph_edges[i], a, b))
-            {
-                graph[graph_edges[i].st].push_back(graph_edges[i].end);
-                graph[graph_edges[i].end].push_back(graph_edges[i].st);
-            }
-        }
-        for( int i = a  ; i <= b ; i++ )
-        {
-             dijikstra( i ,graph ) ;
-             for( auto it : graph[i])
-             {
-                for( auto itr : graph[i])
-                {
-                    if( it == itr )continue;
-                    if( Path[{ it , itr}][0] > Path[{ i , it }][0] + Path[{ i , itr}][0] )
-                    {
-                        Path[{ it , itr}].clear() ;
-                        Path[{ it , itr}].push_back(Path[{ i , it }][0] + Path[{ i , itr}][0]) ;
-                        for( int j = 1 ; j < Path[{i , itr}].size() ; j++ )
-                        {
-                            Path[{ it , itr}].push_back(Path[{i , itr}][j]) ;
-                        }
-                        Path[{ it , itr}].push_back(i) ;
-                        for( int j = Path[{i , itr}].size() - 1 ; j >= 1 ; j-- )
-                        {
-                            Path[{ it , itr}].push_back(Path[{i , itr}][j]) ;
-                        }
-                    }
-                }
-             }
-        }
-        print_graph(graph) ;
+        for( int i = 0 ; i < 50 ; i++ )cout << endl ;
+        sleep(30) ;
     }
 
     // dijikstra( start_node + 1 , graph) ;

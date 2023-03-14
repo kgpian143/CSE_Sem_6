@@ -96,7 +96,7 @@ int main( int argc , char **argv )
         }
         print_graph(*total_nodes) ;
         for( int i = 0 ; i < 50 ; i++ )cout <<  endl ;
-        sleep(10) ;
+        sleep(50) ;
     }
     shmdt(graph_edges);
     shmdt(total_nodes);
