@@ -197,7 +197,7 @@ void execute(string cmd)
         char path[1000];
         if (argv.size() == 1)
         {
-            strcpy(path, "/home/vinod");
+            strcpy(path, "/home/lenovo");
         }
         else
         {
