@@ -18,7 +18,92 @@ process and a client process.
 #include <arpa/inet.h>
 
 			/* THE SERVER PROCESS */
+void send_message( char mess[100] , int sockfd )
+{
+    int  ind1 = 0, ind2 = 0;
+    char buf[10];
+    while (1)
+    {
+        if (ind1 == 10)
+        {
+            // printf("%s uhiu \n",buf) ;
+            send(sockfd, buf, 10, 0);
+            ind1 = 0;
+        }
+        else if (mess[ind2] == '\0')
+		{
+            buf[ind1++] = '\0';
+            send(sockfd, buf, 10, 0);
+			break;
+		}
+            
+        buf[ind1++] = mess[ind2++];
+    }
+}
 
+void receive_message( char mess[100] , int id )
+{
+	char buf[10] ; 
+    mess[0] = '\0' ;
+	int k , j , flag =0 ; 
+	for( int i = 0 ; i < 10 ; i++ )buf[i] = '\0' ;
+	while(1)
+	{
+        recv( id , buf  , 10 , 0 ) ;
+        // printf(" %s 0 %s \n",mess , buf) ;
+		strcat( mess , buf ) ;
+		for( int i = 0 ; i < 10 ; i++ )
+		{
+			if( buf[i] == '\0')
+			{
+				flag =1 ;
+				break; 
+			}
+            buf[i] = '\0' ;
+		}
+		if(flag)break;
+	}
+}
+void my_send(char message[100], int sockfd)
+{
+	char buf[10];
+	int j = 0;
+	for (int i = 0; i < 100; i++)
+	{
+		if(message[i] == '\0')break;
+		if (j == 9)
+		{
+			send(sockfd, buf, 10, 0);
+			// printf("%s ser\n",buf) ;
+			for (int k = 0; k < 10; k++)
+				buf[k] = '\0';
+			j = 0 ;
+		}
+		buf[j++] = message[i];
+	}
+	send(sockfd, buf, 10, 0);
+	// printf("%s ser\n",buf) ;
+	for (int k = 0; k < 10; k++)
+		buf[k] = '\0';
+	send(sockfd, buf, strlen(buf), 0);
+}
+void my_rec(char message[100], int sockfd)
+{
+	// int sockfd = atoi((char *)arg);
+	char buf[10];
+	// char message[5005];
+	while (1)
+	{
+		int n = recv(sockfd, buf, 10, 0);
+		// printf("%s cli\n",buf) ;
+		if (n == 0)
+			break;
+		strcat(message, buf);
+		for (int i = 0; i < 10; i++)
+			buf[i] = '\0';
+		if( strlen(buf) == 100 )break ;
+	}
+}
 int main()
 {
 	int			sockfd, newsockfd ; /* Socket descriptors */
@@ -60,7 +145,7 @@ int main()
 		exit(0);
 	}
 
-	listen(sockfd, 5); /* This specifies that up to 5 concurrent client
+	listen(sockfd, 10); /* This specifies that up to 10 concurrent client
 			      requests will be queued up while the system is
 			      executing the "accept" system call below.
 			   */
@@ -98,7 +183,7 @@ int main()
 		*/
 		
 		strcpy(buf,"Message from server");
-		send(newsockfd, buf, strlen(buf) + 1, 0);
+		send_message(buf , newsockfd );
 
 		/* We now receive a message from the client. For this example
   		   we make an assumption that the entire message sent from the
@@ -110,7 +195,7 @@ int main()
 		  is received. Look up the return value of recv() to see how you
 		  can do this.
 		*/ 
-		recv(newsockfd, buf, 100, 0);
+		receive_message (buf , newsockfd );
 		printf("%s\n", buf);
 
 		close(newsockfd);

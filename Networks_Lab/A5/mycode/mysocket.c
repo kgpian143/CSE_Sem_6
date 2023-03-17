@@ -1,3 +1,13 @@
+/**
+ * @file mysocket.c
+ * @author your name (you@domain.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-03-15
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -10,58 +20,104 @@
 #include "mysocket.h"
 #define MAX_QUEUE_SIZE 10
 
+
+int is_connect ;
+int my_sockfd  ;
+
 typedef struct
 {
-    char *items[MAX_QUEUE_SIZE];
+    char *mess[MAX_QUEUE_SIZE];
+    int mess_size[MAX_QUEUE_SIZE];
     int front;
     int rear;
+    int size  ; 
 } Queue;
 
+/**
+ * @brief Create a Queue object
+ * 
+ * @return Queue* 
+ */
 Queue *createQueue()
 {
     Queue *queue = (Queue *)malloc(sizeof(Queue));
     queue->front = 0;
-    queue->rear = -1;
+    queue->rear = 0;
+    queue->size = 0 ;
     return queue;
 }
 
+/**
+ * @brief 
+ * 
+ * @param queue 
+ */
 void destroyQueue(Queue *queue)
 {
     free(queue);
 }
 
+/**
+ * @brief 
+ * 
+ * @param queue 
+ * @return int 
+ */
 int isEmpty(Queue *queue)
 {
-    return (queue->rear < queue->front);
+    return (queue->size == 0);
 }
+
+/**
+ * @brief 
+ * 
+ * @param queue 
+ * @return int 
+ */
 
 int isFull(Queue *queue)
 {
-    return (queue->rear == MAX_QUEUE_SIZE - 1);
+    return (queue->size == MAX_QUEUE_SIZE );
 }
 
-void enqueue(Queue *queue, char *item)
+/**
+ * @brief 
+ * 
+ * @param queue 
+ * @param mess 
+ */
+void enqueue(Queue *queue, char *mess , int mess_size )
 {
     if (isFull(queue))
     {
         printf("Error: Queue is full\n");
         exit(1);
     }
-    queue->rear++;
-    queue->items[queue->rear] = (char *)malloc(strlen(item) + 1);
-    strcpy(queue->items[queue->rear], item);
+    queue->mess[queue->rear] = (char *)malloc(strlen(mess) + 1);
+    strcpy(queue->mess[queue->rear], mess);
+    queue->mess_size[queue->rear] = mess_size ;    
+    queue->size++ ;  
+    queue->rear = ( queue->rear + 1 ) % 10  ;
 }
 
-char *dequeue(Queue *queue)
+/**
+ * @brief 
+ * 
+ * @param queue 
+ * @return char* 
+ */
+char *dequeue(Queue *queue , int *mess_size)
 {
     if (isEmpty(queue))
     {
         printf("Error: Queue is empty\n");
         exit(1);
     }
-    char *item = queue->items[queue->front];
-    queue->front++;
-    return item;
+    char *mess = queue->mess[queue->front];
+    *mess_size = queue->mess_size[queue->front] ;
+    queue->size-- ;
+    queue->front = ( queue->front + 1) % 10;
+    return mess;
 }
 
 Queue *Send_Message, *Received_Message;
@@ -71,31 +127,65 @@ pthread_t R, S;
 pthread_mutex_t Rq_lock, Sq_lock;
 pthread_cond_t Rq_cond, Sq_cond;
 
+/**
+ * @brief 
+ * 
+ * @param arg 
+ * @return void* 
+ */
 void *func_R(void *arg)
 {
     while (1)
     {
-        int sockfd = atoi((char *)arg);
-        char buf[1000];
-        char message[5005];
-        while (1)
-        {
-            int n = recv(sockfd, buf, 1000, 0);
-            if (n == 0)
+        if( is_connect == 0 )continue; 
+        int sockfd = my_sockfd;
+        char message[5000];
+        
+        int mess_bytes = 0 ; 
+        char buffer[4] ;
+
+        while( 4 - mess_bytes > 0 )
+        {    
+            int rec_bytes = recv( sockfd , buffer + mess_bytes , 4 - mess_bytes  , 0 ) ;
+            mess_bytes += rec_bytes  ; 
+            if( rec_bytes == 0 )
+            {
+                is_connect = 0 ;
                 break;
-            strcat(message, buf);
-            for (int i = 0; i < 1000; i++)
-                buf[i] = '\0';
+            }
+            // printf("0\n");
         }
+        int mess_size = 0 ;
+        for( int i = 3 ; i >= 0 ; i-- )
+        {
+            mess_size = mess_size * 10 + buffer[i] - '0' ; 
+        }
+        printf("size recieved  : %d \n" , mess_size ) ;
+        int total_rec_bytes = 0 ;
+        while( mess_size - total_rec_bytes > 0  )
+        {
+            int rec_bytes = recv( sockfd , message + total_rec_bytes , mess_size - total_rec_bytes  , 0 ) ;
+            if( rec_bytes == 0 )
+            {
+                is_connect = 0 ;
+                break;
+            }
+            total_rec_bytes += rec_bytes  ;   
+            // printf("1\n") ;
+        }
+
+        // printf("mess rec : %s queue size : %d \n",message , Received_Message->rear + 1 );
 
         // Critical Section Starts
 
         pthread_mutex_lock(&Rq_lock);
 
         while (isFull(Received_Message))
+        {
             pthread_cond_wait(&Rq_cond, &Rq_lock);
-        enqueue(Received_Message, message);
-
+        }
+        enqueue(Received_Message, message , mess_size );
+        // printf("queue size : %d\n", Received_Message->size ) 
         pthread_cond_signal(&Rq_cond);
         pthread_mutex_unlock(&Rq_lock);
 
@@ -104,53 +194,78 @@ void *func_R(void *arg)
     pthread_exit(NULL);
 }
 
+/**
+ * @brief 
+ * 
+ * @param arg 
+ * @return void* 
+ */
 void *func_S(void *arg)
 {
     while (1)
     {
-        int sockfd = atoi((char *)arg);
+        if( is_connect == 0 )continue;
+        int sockfd = my_sockfd;
         char buf[1000];
-        char message[5005];
-
+        char message[5000];
+        int mess_size = 0 ;
 
         // Critical Section Starts
 
         pthread_mutex_lock(&Sq_lock);
 
-        while (isEmpty(Send_Message) != 1)
+        while (isEmpty(Send_Message))
         {
             pthread_cond_wait(&Sq_cond, &Sq_lock);
         }
-        strcpy(message, dequeue(Send_Message));
+        // printf("Message sent : %s",Send_Message->mess[Send_Message->front]);
+        strcpy(message, dequeue(Send_Message , &mess_size));
 
         pthread_cond_signal(&Sq_cond);
         pthread_mutex_unlock(&Sq_lock);
+        
 
         // Critical Section Ends
-
-        int j = 0;
-        for (int i = 0; i < 5000; i++)
+ 
+        if( mess_size > 5000 )mess_size = 5000 ;
+        int n = mess_size ;
+        char size_buff[4] ;
+        for( int  i = 0 ; i < 4 ; i++ )
         {
-            if (j == 999)
-            {
-                send(sockfd, buf, 1000, 0);
-                for (int k = 0; k < 1000; k++)
-                    buf[k] = '\0';
-            }
-            buf[j++] = message[i];
+            size_buff[i] = '0' + n % 10 ; 
+            n = n / 10 ; 
         }
-        send(sockfd, buf, 1000, 0);
-        for (int k = 0; k < 1000; k++)
-            buf[k] = '\0';
-        send(sockfd, buf, strlen(buf), 0);
-        // sleep(5);
+        send( sockfd , size_buff , 4  , 0 ) ;
+        printf("Size sent : %d \n",mess_size);
+        
+        int sent_len = 0;
+        while (sent_len < mess_size)
+        {
+            int send_size = (mess_size - sent_len > 1000)? 1000 : mess_size - sent_len;
+            sent_len += send( sockfd , message + sent_len , send_size , 0 ) ; 
+            // printf("3\n") ;
+        }
     }
     pthread_exit(NULL);
 }
+
+/**
+ * @brief 
+ * 
+ * @param family 
+ * @param type 
+ * @param protocol 
+ * @return int 
+ */
+
 int my_socket(int family, int type, int protocol)
 {
     int fd = socket(family, SOCK_STREAM, protocol);
-
+    if (fd < 0) {
+		perror("Cannot create socket\n");
+		exit(0);
+	}
+    my_sockfd = fd ;
     char sockfd[10]; 
 
     sprintf( sockfd ,"%d", fd ) ;
@@ -169,23 +284,85 @@ int my_socket(int family, int type, int protocol)
     return fd;
 }
 
+/**
+ * @brief 
+ * 
+ * @param Sockfd 
+ * @param addr 
+ * @param addrlen 
+ * @return int 
+ */
+
 int my_bind(int Sockfd, struct sockaddr *addr, socklen_t addrlen)
 {
-    return bind(Sockfd, addr,
+    int bind_val = bind(Sockfd, addr,
                 addrlen);
+    if (bind_val < 0) {
+		perror("Unable to bind local address\n");
+		exit(0);
+	}
+    return bind_val ;
 }
 
+/**
+ * @brief 
+ * 
+ * @param Sockfd 
+ * @param clients 
+ * @return int 
+ */
 int my_listen(int Sockfd, int clients)
 {
     return listen(Sockfd, clients);
 }
 
-int my_accept(int Sockfd, struct sockaddr *addr, socklen_t addrlen)
+/**
+ * @brief 
+ * 
+ * @param Sockfd 
+ * @param addr 
+ * @param addrlen 
+ * @return int 
+ */
+
+int my_accept(int Sockfd, struct sockaddr *addr, socklen_t *addrlen)
 {
-    return connect(Sockfd, addr, addrlen);
+    my_sockfd = accept(Sockfd, addr, addrlen);
+    is_connect = 1 ;
+    return  my_sockfd ;
 }
 
-ssize_t my_send(int Sockfd, const char *buf, size_t len, int flags)
+/**
+ * @brief 
+ * 
+ * @param Sockfd 
+ * @param addr 
+ * @param addrlen 
+ * @return int 
+ */
+
+int my_connect(int Sockfd, struct sockaddr *addr, socklen_t addrlen)
+{
+    int connect_val = connect(Sockfd, addr, addrlen); 
+    if (connect_val < 0)
+	{
+		perror("Unable to connect to server\n");
+		exit(0);
+	}
+    is_connect = 1 ;
+    return connect_val ;
+}
+
+/**
+ * @brief 
+ * 
+ * @param Sockfd 
+ * @param buf 
+ * @param len 
+ * @param flags 
+ * @return ssize_t 
+ */
+ssize_t my_send(int Sockfd,  char *buf, size_t len, int flags)
 {
 
     // Critical Section Starts
@@ -195,7 +372,7 @@ ssize_t my_send(int Sockfd, const char *buf, size_t len, int flags)
     {
         pthread_cond_wait(&Sq_cond, &Sq_lock);
     }
-    enqueue(Send_Message, buf);
+    enqueue(Send_Message, buf , len);
 
     pthread_cond_signal(&Sq_cond);
     pthread_mutex_unlock(&Sq_lock);
@@ -204,8 +381,18 @@ ssize_t my_send(int Sockfd, const char *buf, size_t len, int flags)
     return strlen(buf);
 }
 
-ssize_t my_recv(int Sockfd, const char *buf, size_t len, int flags)
+/**
+ * @brief 
+ * 
+ * @param Sockfd 
+ * @param buf 
+ * @param len 
+ * @param flags 
+ * @return ssize_t 
+ */
+ssize_t my_recv(int Sockfd,  char *buf, size_t len, int flags)
 {
+    int mess_size = 0 ;
     // Critical Section Starts
     
     pthread_mutex_lock(&Rq_lock);
@@ -213,14 +400,20 @@ ssize_t my_recv(int Sockfd, const char *buf, size_t len, int flags)
     {  
         pthread_cond_wait(&Rq_cond, &Rq_lock); 
     }
-    strcpy(buf, dequeue(Received_Message));
+    strcpy(buf, dequeue(Received_Message , &mess_size));
     pthread_cond_signal(&Rq_cond);
     pthread_mutex_unlock(&Rq_lock);
 
     // Critical Section Ends
-    return strlen(buf);
+    return mess_size;
 }
 
+/**
+ * @brief 
+ * 
+ * @param Sockfd 
+ * @return int 
+ */
 int my_close(int Sockfd)
 {
     pthread_cancel(R);
@@ -228,7 +421,4 @@ int my_close(int Sockfd)
     destroyQueue(Send_Message);
     destroyQueue(Received_Message);
     close(Sockfd);
-}
-int main(int argc, char *argv[])
-{
 }

@@ -16,11 +16,11 @@ int my_bind( int Sockfd , struct sockaddr *addr , socklen_t addrlen );
 
 int my_listen( int Sockfd , int clients ) ;
 
-int my_accept( int Sockfd , struct sockaddr * addr , socklen_t addrlen ) ;
+int my_accept( int Sockfd , struct sockaddr * addr , socklen_t *addrlen ) ;
 
-ssize_t my_send  ( int Sockfd , const char *buf , size_t len , int flags ) ;
+ssize_t my_send  ( int Sockfd ,  char *buf , size_t len , int flags ) ;
 
 
-ssize_t my_recv( int Sockfd , const char *buf , size_t len , int flags ) ;
+ssize_t my_recv( int Sockfd ,  char *buf , size_t len , int flags ) ;
 
 int my_close( int Sockfd ) ;
