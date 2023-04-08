@@ -1,0 +1,54 @@
+ 
+DATA STRUCTURE USED :-
+    1. MAP :- To store the room details and guest details.
+    2. SET :- To store the room number and priority of the guest.
+    3. MUTEX :- To lock the critical section.
+    4. SEMAPHORE :- To lock the critical section.
+
+
+SET WORK :-
+   1. Create a priority queue to store the room number and priority of the guest. 
+   2. Sort the priority queue in increasing order of guest priority.
+   3. If the guest priority is 0, the room is empty.
+   4. If the guest priority is greater than 0, the room is occupied.
+   5. A guest thread should check the first element of the priority queue. 
+   6. If the priority of the guest is 0 or all rooms are occupied, the thread should check for the guest with the lowest priority. 
+   7. If the guest with the lowest priority is found, the coming guest can book that room and the guest with the lowest priority is removed from the set. 
+   8. If the guest with the lowest priority is not found, the coming guest should wait for the room to be empty.
+   9. If a room is occupied twice, the room is not inserted into the set.
+   10. When all rooms are occupied twice, the set is empty and the guest thread should wait for the room to be clean.
+   11. When a room is cleaned, the room is inserted into the set with the priority of 0.
+
+
+MUTEX WORK :-
+    Mutex in Guest thread:
+        1. Lock the set to check room availability.
+    
+    Mutex in Cleaning thread:
+        1. Lock the set to check if the room is cleaned.
+        2. Lock the room size and increase it by 1.
+    
+    Mutex in Print function:
+        1. Lock the print function to write the output to a file.
+
+SEMAPHORE WORK:
+    Semaphore for Guest Thread:
+        1. Allows all guest threads to request for rooms and sleep in them simultaneously.
+
+    Semaphore for Cleaning Thread:
+        1. Allows all cleaning threads to request for rooms and clean them simultaneously.
+
+WORKFLOW:
+    1. Main function initiallizes the mutex, semaphore, set and map.
+    2. Main function creates the guest and cleaning threads.
+    3. Guest thread checks the set for room availability.
+        3.1. If the room is available, the guest thread books the room and sleeps in it.
+        3.2. If the room is not available, the guest thread waits for the room to be empty.
+    4. Cleaning thread checks the set for room cleaning.
+        4.1. If the room is not cleaned, the cleaning thread cleans the room.
+        4.2. If all room are cleaned by the cleaning thread, the cleaning thread waits for the room to be dirty.
+    5. When the guest thread wakes up, it checks the set for room availability.
+        5.1. If the room is available, the guest thread books the room and sleeps in it.
+        5.2. If the room is not available, the guest thread waits for the room to be empty. 
+
+

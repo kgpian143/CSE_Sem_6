@@ -10,19 +10,18 @@
 
 using namespace std;
 
-
 struct Guest
 {
-    int id ;
-    int rest_time ;
-    int priority ; 
+    int id;
+    int rest_time;
+    int priority;
 };
 
 struct Room
 {
     int occupancy_cnt;
     int waiting_time;
-    Guest guest  ;
+    Guest guest;
     // int guest_id;
 };
 
@@ -36,106 +35,125 @@ bool all_room_dirty = false;
 map<int, Room> room_details; // map for storing room details
 map<int, Guest> guest_details;
 
-
 sem_t booking_room_mutex;
 sem_t cleaning_room_mutex;
 
-pthread_mutex_t booking_lock ;
-pthread_mutex_t clean_lock ; // lock for checking the all rooms are dirty or not 
+pthread_mutex_t booking_lock;
+pthread_mutex_t clean_lock, clean_lock1; // lock for checking the all rooms are dirty or not
+pthread_mutex_t print_lock;              // lock for printing the output
 
-pthread_cond_t share_lock_cond ; 
-// int room_index
+int room_size = 0;
+
+FILE *outputfile = fopen("hotel.log", "wb");
+
+void printFunc(char *buff)
+{
+    pthread_mutex_lock(&print_lock);
+
+    int buff_size = sizeof(char) * strlen(buff);
+    fwrite(buff, sizeof(char), buff_size, outputfile);
+    fwrite(buff, sizeof(char), buff_size, stdout);
+
+    pthread_mutex_unlock(&print_lock);
+}
 
 void *thread_cleaning(void *arg)
 {
+    char buffer[100];
     int id = *(int *)(arg);
-    cout << " Cleaning_Thread " << id << " : I am cleaning staff " << endl;
+
+    sprintf(buffer, "Cleaning_Thread %d : I am cleaning staff \n", id);
+    printFunc(buffer);
+
     while (1)
     {
-        if(!all_room_dirty)
+        if (!all_room_dirty)
         {
-            sleep(1) ;
-            continue ;
+            sleep(1);
+            continue;
         }
 
         sem_wait(&cleaning_room_mutex);
 
-        // Critical Section Start
-
-        while (rooms.size() < n)
+        while (room_size < n)
         {
-            // lock the mutex
-            pthread_mutex_lock(&clean_lock) ;
+            pthread_mutex_lock(&clean_lock);
             int a = rand() % n + 1;
-            bool room_cleaned = ( rooms.find({0, a}) != rooms.end() ) ;
-            pthread_mutex_unlock(&clean_lock) ;
+            bool room_cleaned = (rooms.find({0, a}) != rooms.end());
             if (!room_cleaned)
             {
-                if( room_details[a].guest.priority != 0 )
-                {
-                    guest_details[room_details[a].guest.id].rest_time = 0 ;
-                }
                 rooms.insert({0, a});
+                pthread_mutex_unlock(&clean_lock);
+                if (room_details[a].guest.priority != 0)
+                {
+                    guest_details[room_details[a].guest.id].rest_time = 0;
+                }
                 sleep(room_details[a].waiting_time / 3);
                 room_details[a].occupancy_cnt = 0;
                 room_details[a].waiting_time = 0;
-                cout << "Cleaning_Thread " << id << ": Cleaning staff cleaned the room " << a << endl;
-                
-                if( rooms.size() == n )
+                sprintf(buffer, "Cleaning_Thread %d : Cleaning staff cleaned the room %d \n", id, a);
+                printFunc(buffer);
+
+                pthread_mutex_lock(&clean_lock1);
+
+                room_size++;
+
+                pthread_mutex_unlock(&clean_lock1);
+                if (room_size == n)
                 {
                     all_room_dirty = false;
                 }
             }
-            else {
-                cout << "Cleaning_Thread " << id << ": Cleaning staff tried to clean the room " << a << " but it is already cleaned " << endl;
+            else
+            {
+                pthread_mutex_unlock(&clean_lock);
             }
         }
         sem_post(&cleaning_room_mutex);
-
-        // Critical Section Ends
     }
 }
+
 
 void *thread_guest(void *arg)
 {
     int guest_id = *(int *)arg;
-    cout << "Guest_Thread " << guest_id << " : I am guest thread with priority : "<< guest_details[guest_id].priority << endl;
+    char buffer[100];
+
+    sprintf(buffer, "Guest_Thread %d : I am guest thread with priority : %d \n", guest_id, guest_details[guest_id].priority);
+    printFunc(buffer);
+
     while (1)
     {
-        
-       // Critical Section Start
-        if( all_room_dirty )
+
+        if (all_room_dirty)
         {
-            cout << "Guest_Thread " << guest_id << ": All rooms are dirty, so I am waiting for cleaning staff " << endl;
-            sleep(5) ;
+            sprintf(buffer, "Guest_Thread %d : All rooms are dirty, so I am waiting for cleaning staff \n", guest_id);
+            printFunc(buffer);
+            sleep(rand() % 11 + 10);
             continue;
         }
-         
-        // pthread_mutex_lock(&share_lock);
+
 
         if (rooms.empty())
         {
             all_room_dirty = true;
+            room_size = 0;
             continue;
-            // pthread_cond_signal(&share_lock_cond) ;
         }
-
-        // pthread_mutex_unlock(&share_lock);
 
 
         pthread_mutex_lock(&booking_lock);
 
         auto it = rooms.begin();
-        if(it->first < guest_details[guest_id].priority )rooms.erase(it);
+        if (it->first < guest_details[guest_id].priority)
+            rooms.erase(it);
 
-        pthread_mutex_unlock(&booking_lock) ;
+        pthread_mutex_unlock(&booking_lock);
 
         sem_wait(&booking_room_mutex);
-        
-       // Lock the mutex
-        if (it->first < guest_details[guest_id].priority )
+
+        if (it->first < guest_details[guest_id].priority)
         {
-            // cout << 2 << endl ;
 
             time_t current_time = time(NULL);
             if (room_details[it->second].occupancy_cnt == 0)
@@ -143,16 +161,19 @@ void *thread_guest(void *arg)
                 room_details[it->second].occupancy_cnt += 1;
                 room_details[it->second].guest.id = guest_id;
                 rooms.insert({guest_details[guest_id].priority, it->second});
-                cout << "Guest_Thread " << guest_id << ": Guest got the room " << it->second << endl;
+                sprintf(buffer, "Guest_Thread %d : Guest got the room %d \n", guest_id, it->second);
+                printFunc(buffer);
+
                 guest_details[guest_id].rest_time = rand() % 21 + 10;
-                int rest_time = 0 ;
-                while(guest_details[guest_id].rest_time -- > 0  )
+                int rest_time = 0;
+                while (guest_details[guest_id].rest_time-- > 0)
                 {
-                    sleep(1) ;
-                    rest_time ++ ;
-                    room_details[it->second].waiting_time += 1 ;
+                    sleep(1);
+                    rest_time++;
+                    room_details[it->second].waiting_time += 1;
                 }
-                cout << "Guest_Thread " << guest_id << ": Guest stayed for " << rest_time << " days in room  " << it->second << endl;
+                sprintf(buffer, "Guest_Thread %d : Guest stayed for %d days in room %d \n", guest_id, rest_time, it->second);
+                printFunc(buffer);
                 it = rooms.find({guest_details[guest_id].priority, it->second});
                 if (it != rooms.end())
                 {
@@ -164,41 +185,52 @@ void *thread_guest(void *arg)
             {
                 if (it->first > 0)
                 {
-                    guest_details[room_details[it->second].guest.id].rest_time = 0 ;
+                    guest_details[room_details[it->second].guest.id].rest_time = 0;
                 }
-                cout << "Guest_Thread " << guest_id << ": Guest got the room " << it->second << endl;
+
+                sprintf(buffer, "Guest_Thread %d : Guest got the room %d \n", guest_id, it->second);
+                printFunc(buffer);
+
                 room_details[it->second].occupancy_cnt += 1;
-                room_details[it->second].guest = guest_details[guest_id] ;
+                room_details[it->second].guest = guest_details[guest_id];
                 guest_details[guest_id].rest_time = rand() % 21 + 10;
-                int rest_time = 0 ;
-                while(guest_details[guest_id].rest_time -- > 0  )
+                int rest_time = 0;
+                while (guest_details[guest_id].rest_time-- > 0)
                 {
-                    sleep(1) ;
-                    rest_time ++ ;
-                    room_details[it->second].waiting_time += 1 ;
+                    sleep(1);
+                    rest_time++;
+                    room_details[it->second].waiting_time += 1;
                 }
-                cout << "Guest_Thread " << guest_id << ": Guest stayed for " << rest_time << " days in room  " << it->second << endl;
+
+                sprintf(buffer, "Guest_Thread %d : Guest stayed for %d days in room %d \n", guest_id, rest_time, it->second);
+                printFunc(buffer);
             }
         }
-        else 
+        else
         {
-            cout<<"Guest_Thread " << guest_id << ": Not able to get room " << endl;
-            // pthread_mutex_unlock(&booking_lock);
+            sprintf(buffer, "Guest_Thread %d : Not able to get room \n", guest_id);
+            printFunc(buffer);
         }
         sem_post(&booking_room_mutex);
 
-        // Critical Section Ends
         int sleep_time = rand() % 11 + 10;
         sleep(sleep_time);
     }
-    cout << "Guest_Thread " << guest_id << " : I am exiting " << endl;
-    pthread_exit(NULL) ;
+    sprintf(buffer, "Guest_Thread %d : I am exiting \n", guest_id);
+    printFunc(buffer);
+    pthread_exit(NULL);
 }
+
 int main()
 {
-    //
+    // setvbuf is used to disable the output buffering
+
+    setvbuf(outputfile, NULL, _IONBF, 0);
+
+    // srand is used to generate random number
 
     srand(time(NULL));
+
     cout << "Enter the number of rooms  in hotel  : ";
     cin >> n;
     cout << "Enter the number of guest who comes to hotel : ";
@@ -209,9 +241,12 @@ int main()
     sem_init(&booking_room_mutex, 0, y);
     sem_init(&cleaning_room_mutex, 0, x);
 
-    // mutext init
-    pthread_mutex_init(&booking_lock, NULL); 
-    pthread_cond_init(&share_lock_cond , NULL) ;
+    // mutex init
+    pthread_mutex_init(&booking_lock, NULL);
+    pthread_mutex_init(&print_lock, NULL);
+    pthread_mutex_init(&clean_lock1, NULL);
+    pthread_mutex_init(&clean_lock, NULL);
+
     for (int i = 0; i < n; i++)
     {
         rooms.insert({0, i + 1});
@@ -230,7 +265,7 @@ int main()
         int priority = rand() % y + 1;
         guest_details[i + 1].priority = priority;
         pthread_create(&guest[i], NULL, thread_guest, id);
-        sleep(1) ;
+        sleep(1);
     }
 
     for (int i = 0; i < x; i++)
@@ -238,7 +273,7 @@ int main()
         int *id = new int;
         *id = i + 1;
         pthread_create(&cleaning_staff[i], NULL, thread_cleaning, id);
-        sleep(1) ;
+        sleep(1);
     }
     for (int i = 0; i < x; i++)
     {
@@ -251,4 +286,10 @@ int main()
 
     sem_destroy(&booking_room_mutex);
     sem_destroy(&cleaning_room_mutex);
+
+    pthread_mutex_destroy(&booking_lock);
+    pthread_mutex_destroy(&print_lock);
+    pthread_mutex_destroy(&clean_lock1);
+    pthread_mutex_destroy(&clean_lock);
+
 }

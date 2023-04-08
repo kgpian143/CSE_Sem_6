@@ -1,0 +1,577 @@
+Guest_Thread 1 : I am guest thread with priority : 7 
+Guest_Thread 1 : Guest got the room 1 
+Guest_Thread 2 : I am guest thread with priority : 1 
+Guest_Thread 2 : Guest got the room 2 
+Guest_Thread 3 : I am guest thread with priority : 5 
+Guest_Thread 3 : Guest got the room 3 
+Guest_Thread 4 : I am guest thread with priority : 6 
+Guest_Thread 4 : Guest got the room 4 
+Guest_Thread 5 : I am guest thread with priority : 3 
+Guest_Thread 5 : Guest got the room 5 
+Guest_Thread 6 : I am guest thread with priority : 5 
+Guest_Thread 6 : Guest got the room 2 
+Guest_Thread 2 : Guest stayed for 5 days in room 2 
+Guest_Thread 7 : I am guest thread with priority : 2 
+Guest_Thread 7 : Not able to get room 
+Guest_Thread 8 : I am guest thread with priority : 6 
+Guest_Thread 8 : Guest got the room 5 
+Guest_Thread 5 : Guest stayed for 4 days in room 5 
+Guest_Thread 9 : I am guest thread with priority : 1 
+Guest_Thread 9 : Not able to get room 
+Cleaning_Thread 1 : I am cleaning staff 
+Cleaning_Thread 2 : I am cleaning staff 
+Cleaning_Thread 3 : I am cleaning staff 
+Guest_Thread 3 : Guest stayed for 12 days in room 3 
+Guest_Thread 9 : Guest got the room 3 
+Guest_Thread 7 : Not able to get room 
+Guest_Thread 2 : Not able to get room 
+Guest_Thread 5 : Not able to get room 
+Guest_Thread 8 : Guest stayed for 19 days in room 5 
+Guest_Thread 3 : Not able to get room 
+Guest_Thread 4 : Guest stayed for 25 days in room 4 
+Guest_Thread 1 : Guest stayed for 30 days in room 1 
+Guest_Thread 7 : Guest got the room 1 
+Guest_Thread 6 : Guest stayed for 29 days in room 2 
+Guest_Thread 2 : Guest got the room 4 
+Guest_Thread 5 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 3 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 4 
+Guest_Thread 1 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 9 : Guest stayed for 27 days in room 3 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 1 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 3 
+Guest_Thread 5 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 5 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 7 : Guest stayed for 21 days in room 1 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 2 
+Guest_Thread 3 : Guest got the room 1 
+Guest_Thread 1 : Guest got the room 2 
+Guest_Thread 9 : Guest got the room 3 
+Guest_Thread 5 : Guest got the room 4 
+Guest_Thread 6 : Guest got the room 5 
+Guest_Thread 2 : Guest stayed for 29 days in room 4 
+Guest_Thread 8 : Guest got the room 3 
+Guest_Thread 9 : Guest stayed for 7 days in room 3 
+Guest_Thread 4 : Guest got the room 4 
+Guest_Thread 5 : Guest stayed for 4 days in room 4 
+Guest_Thread 7 : Not able to get room 
+Guest_Thread 9 : Not able to get room 
+Guest_Thread 6 : Guest stayed for 13 days in room 5 
+Guest_Thread 8 : Guest stayed for 13 days in room 3 
+Guest_Thread 3 : Guest stayed for 21 days in room 1 
+Guest_Thread 7 : Guest got the room 1 
+Guest_Thread 2 : Guest got the room 5 
+Guest_Thread 1 : Guest stayed for 29 days in room 2 
+Guest_Thread 5 : Guest got the room 2 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 3 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 4 : Guest stayed for 22 days in room 4 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 7 : Guest stayed for 11 days in room 1 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 5 
+Guest_Thread 9 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 1 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 3 
+Guest_Thread 2 : Guest stayed for 16 days in room 5 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 1 
+Guest_Thread 3 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 4 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 5 : Guest stayed for 21 days in room 2 
+Guest_Thread 9 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 2 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 1 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 3 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 2 
+Guest_Thread 8 : Guest got the room 1 
+Guest_Thread 6 : Guest got the room 2 
+Guest_Thread 5 : Guest got the room 3 
+Guest_Thread 7 : Guest got the room 4 
+Guest_Thread 3 : Guest got the room 5 
+Guest_Thread 4 : Guest got the room 4 
+Guest_Thread 9 : Not able to get room 
+Guest_Thread 7 : Guest stayed for 6 days in room 4 
+Guest_Thread 2 : Not able to get room 
+Guest_Thread 1 : Guest got the room 3 
+Guest_Thread 5 : Guest stayed for 12 days in room 3 
+Guest_Thread 8 : Guest stayed for 19 days in room 1 
+Guest_Thread 9 : Guest got the room 1 
+Guest_Thread 4 : Guest stayed for 14 days in room 4 
+Guest_Thread 2 : Not able to get room 
+Guest_Thread 6 : Guest stayed for 27 days in room 2 
+Guest_Thread 5 : Guest got the room 2 
+Guest_Thread 7 : Not able to get room 
+Guest_Thread 8 : Guest got the room 5 
+Guest_Thread 3 : Guest stayed for 23 days in room 5 
+Guest_Thread 1 : Guest stayed for 18 days in room 3 
+Guest_Thread 2 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 1 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 3 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 3 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 5 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 1 
+Guest_Thread 8 : Guest stayed for 19 days in room 5 
+Guest_Thread 2 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 9 : Guest stayed for 29 days in room 1 
+Guest_Thread 1 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 4 
+Guest_Thread 3 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 5 : Guest stayed for 29 days in room 2 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 2 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 2 
+Guest_Thread 9 : Guest got the room 1 
+Guest_Thread 4 : Guest got the room 2 
+Guest_Thread 5 : Guest got the room 3 
+Guest_Thread 6 : Guest got the room 4 
+Guest_Thread 1 : Guest got the room 5 
+Guest_Thread 7 : Guest got the room 1 
+Guest_Thread 9 : Guest stayed for 8 days in room 1 
+Guest_Thread 3 : Guest got the room 3 
+Guest_Thread 5 : Guest stayed for 5 days in room 3 
+Guest_Thread 8 : Guest got the room 4 
+Guest_Thread 6 : Guest stayed for 5 days in room 4 
+Guest_Thread 2 : Not able to get room 
+Guest_Thread 1 : Guest stayed for 11 days in room 5 
+Guest_Thread 9 : Guest got the room 5 
+Guest_Thread 5 : Not able to get room 
+Guest_Thread 4 : Guest stayed for 20 days in room 2 
+Guest_Thread 8 : Guest stayed for 13 days in room 4 
+Guest_Thread 7 : Guest stayed for 17 days in room 1 
+Guest_Thread 6 : Guest got the room 2 
+Guest_Thread 2 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 1 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 4 
+Guest_Thread 3 : Guest stayed for 28 days in room 3 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 3 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 2 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 5 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 9 : Guest stayed for 25 days in room 5 
+Guest_Thread 2 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 1 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 1 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 5 
+Guest_Thread 3 : Guest got the room 1 
+Guest_Thread 6 : Guest stayed for 29 days in room 2 
+Guest_Thread 4 : Guest got the room 2 
+Guest_Thread 9 : Guest got the room 3 
+Guest_Thread 5 : Guest got the room 4 
+Guest_Thread 7 : Guest got the room 5 
+Guest_Thread 2 : Not able to get room 
+Guest_Thread 3 : Guest stayed for 12 days in room 1 
+Guest_Thread 8 : Guest got the room 1 
+Guest_Thread 9 : Guest stayed for 10 days in room 3 
+Guest_Thread 1 : Guest got the room 3 
+Guest_Thread 6 : Guest got the room 5 
+Guest_Thread 7 : Guest stayed for 12 days in room 5 
+Guest_Thread 2 : Not able to get room 
+Guest_Thread 4 : Guest stayed for 22 days in room 2 
+Guest_Thread 5 : Guest stayed for 20 days in room 4 
+Guest_Thread 8 : Guest stayed for 14 days in room 1 
+Guest_Thread 3 : Guest got the room 2 
+Guest_Thread 9 : Guest got the room 4 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 2 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 5 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 1 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 5 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 1 : Guest stayed for 27 days in room 3 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 6 : Guest stayed for 27 days in room 5 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 2 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 2 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 3 : Guest stayed for 21 days in room 2 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 4 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 3 
+Guest_Thread 5 : Guest got the room 1 
+Guest_Thread 4 : Guest got the room 2 
+Guest_Thread 6 : Guest got the room 3 
+Guest_Thread 1 : Guest got the room 4 
+Guest_Thread 9 : Guest stayed for 30 days in room 4 
+Guest_Thread 8 : Guest got the room 5 
+Guest_Thread 7 : Not able to get room 
+Guest_Thread 3 : Guest got the room 1 
+Guest_Thread 5 : Guest stayed for 8 days in room 1 
+Guest_Thread 2 : Not able to get room 
+Guest_Thread 9 : Not able to get room 
+Guest_Thread 1 : Guest stayed for 13 days in room 4 
+Guest_Thread 7 : Guest got the room 4 
+Guest_Thread 6 : Guest stayed for 18 days in room 3 
+Guest_Thread 5 : Guest got the room 3 
+Guest_Thread 4 : Guest stayed for 24 days in room 2 
+Guest_Thread 2 : Guest got the room 2 
+Guest_Thread 7 : Guest stayed for 11 days in room 4 
+Guest_Thread 1 : Guest got the room 5 
+Guest_Thread 8 : Guest stayed for 25 days in room 5 
+Guest_Thread 9 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 3 : Guest stayed for 28 days in room 1 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 3 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 5 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 4 
+Guest_Thread 3 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 9 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 5 : Guest stayed for 29 days in room 3 
+Guest_Thread 1 : Guest stayed for 21 days in room 5 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 2 : Guest stayed for 22 days in room 2 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 1 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 2 
+Guest_Thread 4 : Guest got the room 1 
+Guest_Thread 3 : Guest got the room 2 
+Guest_Thread 7 : Guest got the room 3 
+Guest_Thread 6 : Guest got the room 4 
+Guest_Thread 2 : Guest got the room 5 
+Guest_Thread 8 : Guest got the room 5 
+Guest_Thread 2 : Guest stayed for 3 days in room 5 
+Guest_Thread 1 : Guest got the room 3 
+Guest_Thread 4 : Guest stayed for 12 days in room 1 
+Guest_Thread 7 : Guest stayed for 11 days in room 3 
+Guest_Thread 9 : Guest got the room 1 
+Guest_Thread 5 : Not able to get room 
+Guest_Thread 2 : Not able to get room 
+Guest_Thread 7 : Not able to get room 
+Guest_Thread 6 : Guest stayed for 16 days in room 4 
+Guest_Thread 8 : Guest stayed for 14 days in room 5 
+Guest_Thread 4 : Guest got the room 4 
+Guest_Thread 1 : Guest stayed for 15 days in room 3 
+Guest_Thread 3 : Guest stayed for 27 days in room 2 
+Guest_Thread 9 : Guest stayed for 17 days in room 1 
+Guest_Thread 5 : Guest got the room 2 
+Guest_Thread 3 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 2 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 1 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 1 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 4 
+Guest_Thread 9 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 3 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 3 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 4 : Guest stayed for 25 days in room 4 
+Guest_Thread 1 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 5 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 2 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 2 
+Guest_Thread 7 : Guest got the room 1 
+Guest_Thread 5 : Guest stayed for 29 days in room 2 
+Guest_Thread 9 : Guest got the room 2 
+Guest_Thread 6 : Guest got the room 3 
+Guest_Thread 4 : Guest got the room 4 
+Guest_Thread 3 : Guest got the room 5 
+Guest_Thread 2 : Not able to get room 
+Guest_Thread 7 : Guest stayed for 12 days in room 1 
+Guest_Thread 1 : Guest got the room 1 
+Guest_Thread 8 : Guest got the room 2 
+Guest_Thread 9 : Guest stayed for 12 days in room 2 
+Guest_Thread 5 : Not able to get room 
+Guest_Thread 9 : Not able to get room 
+Guest_Thread 2 : Not able to get room 
+Guest_Thread 5 : Not able to get room 
+Guest_Thread 7 : Not able to get room 
+Guest_Thread 6 : Guest stayed for 27 days in room 3 
+Guest_Thread 4 : Guest stayed for 30 days in room 4 
+Guest_Thread 3 : Guest stayed for 29 days in room 5 
+Guest_Thread 9 : Guest got the room 3 
+Guest_Thread 1 : Guest stayed for 23 days in room 1 
+Guest_Thread 5 : Guest got the room 4 
+Guest_Thread 2 : Guest got the room 5 
+Guest_Thread 8 : Guest stayed for 28 days in room 2 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 3 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 1 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 1 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 3 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 4 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 2 : Guest stayed for 19 days in room 5 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 9 : Guest stayed for 23 days in room 3 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 3 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 5 : Guest stayed for 26 days in room 4 
+Guest_Thread 1 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 5 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 2 
+Guest_Thread 7 : Guest got the room 1 
+Guest_Thread 9 : Guest got the room 2 
+Guest_Thread 2 : Guest got the room 3 
+Guest_Thread 8 : Guest got the room 4 
+Guest_Thread 4 : Guest got the room 5 
+Guest_Thread 3 : Guest got the room 2 
+Guest_Thread 9 : Guest stayed for 10 days in room 2 
+Guest_Thread 6 : Guest got the room 3 
+Guest_Thread 2 : Guest stayed for 12 days in room 3 
+Guest_Thread 5 : Guest got the room 1 
+Guest_Thread 7 : Guest stayed for 15 days in room 1 
+Guest_Thread 1 : Guest got the room 4 
+Guest_Thread 8 : Guest stayed for 14 days in room 4 
+Guest_Thread 9 : Not able to get room 
+Guest_Thread 4 : Guest stayed for 21 days in room 5 
+Guest_Thread 2 : Guest got the room 5 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 5 : Guest stayed for 16 days in room 1 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 1 : Guest stayed for 20 days in room 4 
+Guest_Thread 9 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 3 : Guest stayed for 28 days in room 2 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 1 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 3 
+Guest_Thread 5 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 6 : Guest stayed for 27 days in room 3 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 4 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 2 : Guest stayed for 16 days in room 5 
+Guest_Thread 3 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 5 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 2 
+Guest_Thread 1 : Guest got the room 1 
+Guest_Thread 6 : Guest got the room 2 
+Guest_Thread 7 : Guest got the room 3 
+Guest_Thread 4 : Guest got the room 4 
+Guest_Thread 9 : Guest got the room 5 
+Guest_Thread 5 : Guest got the room 5 
+Guest_Thread 9 : Guest stayed for 2 days in room 5 
+Guest_Thread 8 : Guest got the room 3 
+Guest_Thread 7 : Guest stayed for 8 days in room 3 
+Guest_Thread 6 : Guest stayed for 11 days in room 2 
+Guest_Thread 3 : Guest got the room 2 
+Guest_Thread 2 : Not able to get room 
+Guest_Thread 5 : Guest stayed for 13 days in room 5 
+Guest_Thread 9 : Not able to get room 
+Guest_Thread 4 : Guest stayed for 19 days in room 4 
+Guest_Thread 7 : Guest got the room 4 
+Guest_Thread 1 : Guest stayed for 27 days in room 1 
+Guest_Thread 6 : Guest got the room 1 
+Guest_Thread 2 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 5 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 3 : Guest stayed for 22 days in room 2 
+Guest_Thread 9 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 8 : Guest stayed for 28 days in room 3 
+Guest_Thread 1 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 5 
+Guest_Thread 6 : Guest stayed for 14 days in room 1 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 4 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 3 
+Guest_Thread 3 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 2 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 7 : Guest stayed for 22 days in room 4 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 2 
+Guest_Thread 5 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 9 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 1 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 1 
+Guest_Thread 3 : Guest got the room 1 
+Guest_Thread 6 : Guest got the room 2 
+Guest_Thread 2 : Guest got the room 3 
+Guest_Thread 8 : Guest got the room 4 
+Guest_Thread 7 : Guest got the room 5 
+Guest_Thread 9 : Not able to get room 
+Guest_Thread 4 : Guest got the room 3 
+Guest_Thread 6 : Guest stayed for 11 days in room 2 
+Guest_Thread 2 : Guest stayed for 10 days in room 3 
+Guest_Thread 5 : Guest got the room 2 
+Guest_Thread 1 : Guest got the room 5 
+Guest_Thread 8 : Guest stayed for 10 days in room 4 
+Guest_Thread 7 : Guest stayed for 10 days in room 5 
+Guest_Thread 3 : Guest stayed for 15 days in room 1 
+Guest_Thread 9 : Guest got the room 1 
+Guest_Thread 4 : Guest stayed for 11 days in room 3 
+Guest_Thread 2 : Guest got the room 4 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 1 : Guest stayed for 16 days in room 5 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 4 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 1 
+Guest_Thread 9 : Guest stayed for 12 days in room 1 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 2 
+Guest_Thread 3 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 2 : Guest stayed for 12 days in room 4 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 3 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 5 
+Guest_Thread 8 : Guest got the room 1 
+Guest_Thread 6 : Guest got the room 2 
+Guest_Thread 5 : Guest stayed for 30 days in room 4 
+Guest_Thread 9 : Guest got the room 3 
+Guest_Thread 1 : Guest got the room 4 
+Guest_Thread 4 : Guest got the room 5 
+Guest_Thread 3 : Guest got the room 3 
+Guest_Thread 9 : Guest stayed for 6 days in room 3 
+Guest_Thread 7 : Not able to get room 
+Guest_Thread 2 : Not able to get room 
+Guest_Thread 5 : Not able to get room 
+Guest_Thread 8 : Guest stayed for 23 days in room 1 
+Guest_Thread 1 : Guest stayed for 16 days in room 4 
+Guest_Thread 4 : Guest stayed for 14 days in room 5 
+Guest_Thread 9 : Guest got the room 1 
+Guest_Thread 6 : Guest stayed for 25 days in room 2 
+Guest_Thread 2 : Guest got the room 2 
+Guest_Thread 7 : Guest got the room 4 
+Guest_Thread 3 : Guest stayed for 23 days in room 3 
+Guest_Thread 8 : Guest got the room 5 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 1 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 5 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 7 : Guest stayed for 10 days in room 4 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 8 : Guest stayed for 10 days in room 5 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 3 
+Guest_Thread 9 : Guest stayed for 21 days in room 1 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 2 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 4 
+Guest_Thread 2 : Guest stayed for 22 days in room 2 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 3 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 5 
+Guest_Thread 1 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 9 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 5 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 1 
+Guest_Thread 3 : Guest got the room 1 
+Guest_Thread 5 : Guest got the room 2 
+Guest_Thread 2 : Guest got the room 3 
+Guest_Thread 7 : Guest got the room 4 
+Guest_Thread 1 : Guest got the room 5 
+Guest_Thread 4 : Guest got the room 3 
+Guest_Thread 6 : Guest got the room 4 
+Guest_Thread 2 : Guest stayed for 2 days in room 3 
+Guest_Thread 7 : Guest stayed for 2 days in room 4 
+Guest_Thread 9 : Not able to get room 
+Guest_Thread 8 : Guest got the room 2 
+Guest_Thread 5 : Guest stayed for 8 days in room 2 
+Guest_Thread 2 : Not able to get room 
+Guest_Thread 1 : Guest stayed for 16 days in room 5 
+Guest_Thread 9 : Guest got the room 5 
+Guest_Thread 6 : Guest stayed for 18 days in room 4 
+Guest_Thread 7 : Not able to get room 
+Guest_Thread 4 : Guest stayed for 20 days in room 3 
+Guest_Thread 8 : Guest stayed for 16 days in room 2 
+Guest_Thread 5 : Not able to get room 
+Guest_Thread 3 : Guest stayed for 29 days in room 1 
+Guest_Thread 1 : Guest got the room 1 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 2 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 9 : Guest stayed for 18 days in room 5 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 4 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 2 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 5 
+Guest_Thread 5 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 2 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 3 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 3 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 1 
+Guest_Thread 8 : Guest got the room 1 
+Guest_Thread 9 : Guest got the room 2 
+Guest_Thread 2 : Guest got the room 3 
+Guest_Thread 7 : Guest got the room 4 
+Guest_Thread 4 : Guest got the room 5 
+Guest_Thread 5 : Guest got the room 2 
+Guest_Thread 9 : Guest stayed for 7 days in room 2 
+Guest_Thread 1 : Guest stayed for 30 days in room 1 
+Guest_Thread 6 : Guest got the room 3 
+Guest_Thread 2 : Guest stayed for 3 days in room 3 
+Guest_Thread 3 : Guest got the room 4 
+Guest_Thread 7 : Guest stayed for 4 days in room 4 
+Guest_Thread 8 : Guest stayed for 13 days in room 1 
+Guest_Thread 9 : Guest got the room 1 
+Guest_Thread 7 : Not able to get room 
+Guest_Thread 1 : Guest got the room 5 
+Guest_Thread 4 : Guest stayed for 20 days in room 5 
+Guest_Thread 6 : Guest stayed for 19 days in room 3 
+Guest_Thread 5 : Guest stayed for 20 days in room 2 
+Guest_Thread 2 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 5 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 4 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 3 
+Guest_Thread 5 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 3 : Guest stayed for 30 days in room 4 
+Guest_Thread 2 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 8 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 2 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 1 
+Guest_Thread 1 : Guest stayed for 23 days in room 1 
+Guest_Thread 4 : Guest got the room 1 
+Guest_Thread 9 : Guest stayed for 29 days in room 1 
+Guest_Thread 2 : Guest got the room 2 
+Guest_Thread 7 : Guest got the room 3 
+Guest_Thread 5 : Guest got the room 4 
+Guest_Thread 6 : Guest got the room 5 
+Guest_Thread 3 : Guest got the room 2 
+Guest_Thread 2 : Guest stayed for 7 days in room 2 
+Guest_Thread 9 : Not able to get room 
+Guest_Thread 4 : Guest stayed for 11 days in room 1 
+Guest_Thread 8 : Guest got the room 1 
+Guest_Thread 1 : Guest got the room 3 
+Guest_Thread 7 : Guest stayed for 14 days in room 3 
+Guest_Thread 6 : Guest stayed for 10 days in room 5 
+Guest_Thread 5 : Guest stayed for 14 days in room 4 
+Guest_Thread 9 : Guest got the room 4 
+Guest_Thread 3 : Guest stayed for 16 days in room 2 
+Guest_Thread 8 : Guest stayed for 13 days in room 1 
+Guest_Thread 2 : Guest got the room 5 
+Guest_Thread 5 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 2 
+Guest_Thread 7 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 3 
+Guest_Thread 1 : Guest stayed for 21 days in room 5 
+Cleaning_Thread 3 : Cleaning staff cleaned the room 1 
+Cleaning_Thread 1 : Cleaning staff cleaned the room 5 
+Guest_Thread 4 : All rooms are dirty, so I am waiting for cleaning staff 
+Guest_Thread 2 : Guest stayed for 15 days in room 5 
+Guest_Thread 6 : All rooms are dirty, so I am waiting for cleaning staff 
+Cleaning_Thread 2 : Cleaning staff cleaned the room 4 
+Guest_Thread 3 : Guest got the room 1 
+Guest_Thread 8 : Guest got the room 2 
+Guest_Thread 9 : Guest stayed for 22 days in room 2 
+Guest_Thread 5 : Guest got the room 3 
